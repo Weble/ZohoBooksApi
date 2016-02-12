@@ -1,0 +1,23 @@
+{
+    "name": "ZohoBooks Api",
+    "description": "Nacho, nacho man. I want to be a nacho man",
+    "license": "MIT",
+    "keywords": ["zoho", "books", "zohobooks", "api"],
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Daniele Rosario",
+            "email": "daniele@weble.it"
+        }
+    ],
+    "require": {
+        "php" : ">=5.5.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "doctrine/inflector": "^1.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Weble\\ZohoBooksApi\\": "src"
+        }
+    }
+}
