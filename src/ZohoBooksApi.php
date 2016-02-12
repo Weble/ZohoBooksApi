@@ -32,6 +32,12 @@ class ZohoBooksApi
     protected $client;
 
     /**
+     * Stored locally the total number per resource type
+     * @var array
+     */
+    protected $totals = [];
+
+    /**
      * List of available Zoho Books Api endpoints (see https://www.zoho.com/books/api/v3)
      * @var array
      */
@@ -110,6 +116,15 @@ class ZohoBooksApi
                     break;
             }
 
+            // Special case: getXXXTotal
+            $last = $matches[0][count($matches[0]) - 1];
+            $isTotalCall = false;
+
+            if (strtoupper($last) == 'TOTAL') {
+                $isTotalCall = true;
+                array_pop($matches[0]);
+            }
+
             // Convert any getSalesOrders to GET => salesorders by joining any camelcase module name
             $moduleName = strtolower(implode("", array_splice($matches[0], 1)));
 
@@ -123,6 +138,11 @@ class ZohoBooksApi
                 if (in_array($moduleName, $this->availableModules)) {
                     $module = $moduleName;
                 }
+            }
+
+            // Special case: getXXXTotal
+            if ($isTotalCall && $method == 'GET') {
+                return $this->getTotal($module);
             }
 
             // pass along any argument as data
@@ -165,11 +185,15 @@ class ZohoBooksApi
             }
         }
 
+        $config = array_intersect_key($data, array('per_page' => 200, 'page' => 1));
+
         $requestData = [
             'authtoken'         => $this->authToken,
             'organization_id'   => $this->organizationId,
             'JSONString' => $data
         ];
+
+        $requestData = array_merge($requestData, $config);
 
         // Build the url using the id if present
         $url = strtolower($module);
@@ -213,6 +237,7 @@ class ZohoBooksApi
      * Check if the response is ok and get the response data
      * @param $response
      * @throws \Exception
+     * @return array
      */
     protected function getResponseData($response)
     {
@@ -238,4 +263,33 @@ class ZohoBooksApi
 
         return $responseData;
     }
+
+    public function getTotal($module)
+    {
+        // Check if the module is available first
+        if (!in_array($module, $this->availableModules)) {
+            throw new \Exception('Not a valid Module');
+        }
+
+        $requestData = [
+            'authtoken'         => $this->authToken,
+            'organization_id'   => $this->organizationId,
+            'response_option'   => 2,
+            'per_page' => '1'
+        ];
+
+        $response = $this->client->request('GET', 'invoices', [
+            'query' => $requestData
+        ]);
+
+        $data = $this->getResponseData($response);
+
+        if (!isset($data['page_context'])) {
+            throw new \Exception('Cannot retrieve total');
+        }
+
+        return $data['page_context']['total'];
+    }
+
+
 }
