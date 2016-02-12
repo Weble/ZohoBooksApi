@@ -1,5 +1,5 @@
 {
-    "name": "ZohoBooks Api",
+    "name": "webleit/zohobooksapi",
     "description": "Nacho, nacho man. I want to be a nacho man",
     "license": "MIT",
     "keywords": ["zoho", "books", "zohobooks", "api"],
@@ -13,7 +13,7 @@
     "require": {
         "php" : ">=5.5.0",
         "guzzlehttp/guzzle": "~6.0",
-        "doctrine/inflector": "^1.1"
+        "doctrine/inflector": "^1.1",
     },
     "autoload": {
         "psr-0": {
