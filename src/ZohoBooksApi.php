@@ -1,6 +1,6 @@
 <?php
 
-namespace Weble\ZohoBooksApi;
+namespace Webleit\ZohoBooksApi;
 
 use GuzzleHttp\Client;
 use Doctrine\Common\Inflector\Inflector;
@@ -76,7 +76,7 @@ class ZohoBooksApi
         $this->organizationId = $organizationId;
 
         $this->client = new Client([
-           'base_uri' => $this->apiUrl
+            'base_uri' => $this->apiUrl
         ]);
     }
 
@@ -222,11 +222,16 @@ class ZohoBooksApi
      */
     protected function getResponseObject($response, $responseDataObject)
     {
+        // Special case
+        if ($responseDataObject == 'recurringinvoices') {
+            $responseDataObject = 'recurring_invoices';
+        }
+
         if (!isset($response[$responseDataObject])) {
             $responseDataObject = Inflector::singularize($responseDataObject);
 
             if (!isset($response[$responseDataObject])) {
-                throw new \Exception('Cannot find the response data');
+                throw new \Exception('Cannot find the response data: ' . json_encode($response));
             }
         }
 
@@ -264,6 +269,12 @@ class ZohoBooksApi
         return $responseData;
     }
 
+    /**
+     * Get the total records for a module
+     * @param $module
+     * @return int
+     * @throws \Exception
+     */
     public function getTotal($module)
     {
         // Check if the module is available first
@@ -289,6 +300,15 @@ class ZohoBooksApi
         }
 
         return $data['page_context']['total'];
+    }
+
+    /**
+     * Get the list of available modules
+     * @return array
+     */
+    public function getAvailableModules()
+    {
+        return $this->availableModules;
     }
 
 

@@ -3,6 +3,7 @@
     "description": "Nacho, nacho man. I want to be a nacho man",
     "license": "MIT",
     "keywords": ["zoho", "books", "zohobooks", "api"],
+    "version": "1.0",
     "authors": [
         {
             "name": "Daniele Rosario",
@@ -15,8 +16,8 @@
         "doctrine/inflector": "^1.1"
     },
     "autoload": {
-        "psr-0": {
-            "Weble\\ZohoBooksApi\\": "src"
+        "psr-4": {
+            "Webleit\\ZohoBooksApi\\": "src"
         }
     }
 }
