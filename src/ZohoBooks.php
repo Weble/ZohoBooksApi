@@ -3,6 +3,7 @@
 namespace Webleit\ZohoBooksApi;
 
 use Doctrine\Common\Inflector\Inflector;
+use Webleit\ZohoBooksApi\Modules\Contacts;
 use Webleit\ZohoBooksApi\Modules\Module;
 use Webleit\ZohoBooksApi\Modules\Organizations;
 
@@ -10,10 +11,10 @@ use Webleit\ZohoBooksApi\Modules\Organizations;
  * Class ZohoBooks
  * @package Webleit\ZohoBooksApi
  *
- * @property-read Module $contacts
+ * @property-read Contacts $contacts
  * @property-read Module $estimates
  * @property-read Module $salesorders
- * @property-read Module $invoices
+ * @property-read Invoices $invoices
  * @property-read Module $recurringinvoices
  * @property-read Module $creditnotes
  * @property-read Module $customerpayments

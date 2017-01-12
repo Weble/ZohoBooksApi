@@ -2,9 +2,10 @@
 namespace Webleit\ZohoBooksApi\Models;
 
 use Doctrine\Common\Inflector\Inflector;
+use Illuminate\Contracts\Support\Arrayable;
 use Webleit\ZohoBooksApi\Modules\Module;
 
-abstract class Model
+abstract class Model implements \JsonSerializable, Arrayable
 {
     /**
      * @var array
@@ -25,6 +26,14 @@ abstract class Model
     {
         $this->data = $data;
         $this->module = $module;
+    }
+
+    /**
+     * @return Module
+     */
+    public function getModule()
+    {
+        return $this->module;
     }
 
     /**
@@ -60,6 +69,40 @@ abstract class Model
         if (method_exists($this->module, $name)) {
             return call_user_func_array([$this->module, $name], $arguments);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->getData();
+    }
+
+    /**
+     * @return string
+     */
+    public function toJson()
+    {
+        return json_encode($this->toArray());
+    }
+
+    /**
+     * Convert the object into something JSON serializable.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     /**

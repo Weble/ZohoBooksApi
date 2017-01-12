@@ -2,6 +2,8 @@
 
 namespace Webleit\ZohoBooksApi\Modules;
 
+use Webleit\ZohoBooksApi\Models\Organization;
+
 /**
  * Class Organizations
  * @package Webleit\ZohoBooksApi\Modules
@@ -9,7 +11,7 @@ namespace Webleit\ZohoBooksApi\Modules;
 class Organizations extends Module
 {
     /**
-     * @return bool|array
+     * @return bool|Organization
      */
     public function getDefaultOrganization()
     {

@@ -5,6 +5,15 @@ require './vendor/autoload.php';
 
 $zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('cafda604342d6c7be4cd888d6440cf18', '33945686');
 
+
+//$zohoBooks->contacts->getList();
+//$zohoBooks->contacts->getTotal();
+//var_dump($zohoBooks->contacts->get(73602000000065001)->getContactPersons());
+//var_dump($zohoBooks->customerpayments->getList()->toArray());
+// $payment = $zohoBooks->customerpayments->get('73602000000036336');
+// var_dump($payment->toArray());
+// var_dump($payment->getRefunds()->toArray());
+
 // $zohoBooks->invoices->getList();
 // $zohoBooks->invoices->getTotal():
 // $zohoBooks->invoices->get(73602000000064029)
@@ -43,5 +52,3 @@ $zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('cafda604342d6c7be4cd888d6440cf
 } catch (\Webleit\ZohoBooksApi\Exceptions\ErrorResponseException $e) {
     echo $e->getMessage();
 }*/
-
-var_dump($zohoBooks->invoices->get(73602000000039152)->getCreditsApplied());

@@ -7,6 +7,10 @@ use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
 
+/**
+ * Class Module
+ * @package Webleit\ZohoBooksApi\Modules
+ */
 abstract class Module
 {
     /**
@@ -169,14 +173,49 @@ abstract class Module
     }
 
     /**
+     * @param $id
+     * @param $status
+     * @param string $key
+     * @return bool
+     */
+    public function markAs($id, $status, $key = 'status')
+    {
+        $this->client->post($this->getUrl() . '/' . $id . '/' . $key . '/' . $status);
+        // If we arrive here without exceptions, everything went well
+        return true;
+    }
+
+    /**
+     * @param $id
+     * @param $action
+     * @param array $data
+     * @param array $params
+     * @return bool
+     */
+    public function doAction($id, $action, $data = [], $params = [])
+    {
+        $this->client->post($this->getUrl() . '/' . $id . '/' . $action);
+
+        // If we arrive here without exceptions, everything went well
+        return true;
+    }
+
+    /**
      * @param $property
      * @param null $id
+     * @param null $class
+     * @param null $subProperty
+     * @param null $module
      * @return Collection
      */
-    protected function getPropertyList($property, $id = null, $class = null, $subProperty = null)
+    protected function getPropertyList($property, $id = null, $class = null, $subProperty = null, $module = null)
     {
         if (!$class) {
             $class = $this->getModelClassName() . '\\' . ucfirst(strtolower(Inflector::singularize($property)));
+        }
+
+        if (!$module) {
+            $module = $this;
         }
 
         if (!$subProperty) {
@@ -192,9 +231,9 @@ abstract class Module
         $list = $this->client->getList($url);
 
         $collection = new Collection($list[$subProperty]);
-        $collection = $collection->mapWithKeys(function ($item) use ($class) {
+        $collection = $collection->mapWithKeys(function ($item) use ($class, $module) {
             /** @var Model $item */
-            $item = new $class($item, $this);
+            $item = new $class($item, $module);
             return [$item->getId() => $item];
         });
 
@@ -204,7 +243,7 @@ abstract class Module
     /**
      * @return string
      */
-    protected function getModelClassName()
+    public function getModelClassName()
     {
         $className = (new \ReflectionClass($this))->getShortName();
         $class = '\\Webleit\\ZohoBooksApi\\Models\\' . Inflector::singularize(Inflector::camelize($className));

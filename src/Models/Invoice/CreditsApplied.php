@@ -2,16 +2,11 @@
 
 namespace Webleit\ZohoBooksApi\Models\Invoice;
 
-use Webleit\ZohoBooksApi\Models\Model;
-
 /**
  * Class CreditsApplied
  * @package Webleit\ZohoBooksApi\Models\Invoice
  */
-class CreditsApplied extends Model
+class CreditsApplied extends \Webleit\ZohoBooksApi\Models\CreditsApplied
 {
-    public function getKeyName()
-    {
-        return 'creditnote_id';
-    }
+
 }
