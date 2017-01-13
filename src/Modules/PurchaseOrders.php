@@ -3,10 +3,10 @@
 namespace Webleit\ZohoBooksApi\Modules;
 
 /**
- * Class Purchase
+ * Class PurchaseOrders
  * @package Webleit\ZohoBooksApi\Modules
  */
-class Purchase extends Documents
+class PurchaseOrders extends Documents
 {
     /**
      * @param $id string

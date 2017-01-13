@@ -6,6 +6,11 @@ require './vendor/autoload.php';
 $zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('cafda604342d6c7be4cd888d6440cf18', '33945686');
 
 
+var_dump($zohoBooks->settings->openingbalances->get()->toArray());
+// var_dump($zohoBooks->settings->currencies->get('73602000000000107')->getExchangeRates()->getList()->toArray());
+//$zohoBooks->settings->preferences->update(['notify_me_on_online_payment' => true]);
+
+//var_dump($zohoBooks->settings->preferences->getList()->toArray());
 //$zohoBooks->contacts->getList();
 //$zohoBooks->contacts->getTotal();
 //var_dump($zohoBooks->contacts->get(73602000000065001)->getContactPersons());
@@ -14,7 +19,7 @@ $zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('cafda604342d6c7be4cd888d6440cf
 // var_dump($payment->toArray());
 // var_dump($payment->getRefunds()->toArray());
 
-// $zohoBooks->invoices->getList();
+// var_dump($zohoBooks->invoices->getList()->toArray());
 // $zohoBooks->invoices->getTotal():
 // $zohoBooks->invoices->get(73602000000064029)
 

@@ -11,7 +11,7 @@ use Webleit\ZohoBooksApi\Models\Model;
  * Class Module
  * @package Webleit\ZohoBooksApi\Modules
  */
-abstract class Module
+abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
 {
     /**
      * Response types
@@ -46,7 +46,7 @@ abstract class Module
     {
         $list = $this->client->getList($this->getUrl(), null, $params);
 
-        $collection = new Collection($list[$this->getName()]);
+        $collection = new Collection($list[$this->getResourceKey()]);
         $collection = $collection->mapWithKeys(function($item) {
             $item = $this->make($item);
             return [$item->getId() => $item];
@@ -63,7 +63,7 @@ abstract class Module
     public function get($id)
     {
         $item = $this->client->get($this->getUrl(), $id);
-        $data = $item[Inflector::singularize($this->getName())];
+        $data = $item[Inflector::singularize($this->getResourceKey())];
 
         return $this->make($data);
     }
@@ -87,7 +87,7 @@ abstract class Module
     public function create($data, $params = [])
     {
         $data = $this->client->post($this->getUrl(), null, $data, $params);
-        $data = $data[Inflector::singularize($this->getName())];
+        $data = $data[Inflector::singularize($this->getResourceKey())];
 
         return $this->make($data);
     }
@@ -102,7 +102,7 @@ abstract class Module
     public function update($id, $data, $params = [])
     {
         $data = $this->client->put($this->getUrl(), $id, null, $data, $params);
-        $data = $data[Inflector::singularize($this->getName())];
+        $data = $data[Inflector::singularize($this->getResourceKey())];
 
         return $this->make($data);
     }
@@ -151,6 +151,14 @@ abstract class Module
     public function getUrl()
     {
         return self::ENDPOINT . $this->getUrlPath();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResourceKey()
+    {
+        return strtolower($this->getName());
     }
 
     /**

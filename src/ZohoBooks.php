@@ -2,40 +2,42 @@
 
 namespace Webleit\ZohoBooksApi;
 
-use Doctrine\Common\Inflector\Inflector;
+use Webleit\ZohoBooksApi\Mixins\ProvidesModules;
 use Webleit\ZohoBooksApi\Modules\Contacts;
-use Webleit\ZohoBooksApi\Modules\Module;
-use Webleit\ZohoBooksApi\Modules\Organizations;
+use Webleit\ZohoBooksApi\Modules;
 
 /**
  * Class ZohoBooks
  * @package Webleit\ZohoBooksApi
  *
  * @property-read Contacts $contacts
- * @property-read Module $estimates
- * @property-read Module $salesorders
- * @property-read Invoices $invoices
- * @property-read Module $recurringinvoices
- * @property-read Module $creditnotes
- * @property-read Module $customerpayments
- * @property-read Module $expenses
- * @property-read Module $recurringexpenses
- * @property-read Module $purchaseorders
- * @property-read Module $bills
- * @property-read Module $vendorcredits
- * @property-read Module $vendorpayments
- * @property-read Module $bankaccounts
- * @property-read Module $banktransactions
- * @property-read Module $bankrules
- * @property-read Module $chartofaccounts
- * @property-read Module $journals
- * @property-read Module $basecurrencyadjustment
- * @property-read Module $projects
- * @property-read Module $settings
- * @property-read Organizations $organizations
+ * @property-read Modules\Module $estimates
+ * @property-read Modules\SalesOrders $salesorders
+ * @property-read Modules\Invoices $invoices
+ * @property-read Modules\RecurringInvoices $recurringinvoices
+ * @property-read Modules\CreditNotes $creditnotes
+ * @property-read Modules\CustomerPayments $customerpayments
+ * @property-read Modules\Expenses $expenses
+ * @property-read Modules\RecurringExpenses $recurringexpenses
+ * @property-read Modules\PurchaseOrders $purchaseorders
+ * @property-read Modules\Bills $bills
+ * @property-read Modules\VendorCredits $vendorcredits
+ * @property-read Modules\VendorPayments $vendorpayments
+ * @property-read Modules\BankAccounts $bankaccounts
+ * @property-read Modules\BankTransactions $banktransactions
+ * @property-read Modules\BankRules $bankrules
+ * @property-read Modules\ChartOfAccounts $chartofaccounts
+ * @property-read Modules\Journals $journals
+ * @property-read Modules\BaseCurrencyAdjustment $basecurrencyadjustment
+ * @property-read Modules\Projects $projects
+ * @property-read Modules\Settings $settings
+ * @property-read Modules\Organizations $organizations
+ * @property-read Modules\Items $items;
  */
 class ZohoBooks
 {
+    use ProvidesModules;
+
     /**
      * Zoho Books Api Auth Token
      * @var string
@@ -59,6 +61,11 @@ class ZohoBooks
      * @var array
      */
     protected $totals = [];
+
+    /**
+     * @var string
+     */
+    protected $modulesNamespace = '\\Webleit\\ZohoBooksApi\\Modules\\';
 
     /**
      * List of available Zoho Books Api endpoints (see https://www.zoho.com/books/api/v3)
@@ -86,13 +93,14 @@ class ZohoBooks
         'basecurrencyadjustment',
         'projects',
         'settings',
-        'organizations'
+        'organizations',
+        'items'
     ];
 
     /**
      * ZohoBooksApi constructor.
-     * @param $authToken    Zoho Books Api Token (See https://www.zoho.com/books/api/v3/)
-     * @param string $organizationId The organization id you want to deal with (See https://www.zoho.com/books/api/v3/)
+     * @param string $authToken         Zoho Books Api Token (See https://www.zoho.com/books/api/v3/)
+     * @param string $organizationId    The organization id you want to deal with (See https://www.zoho.com/books/api/v3/)
      */
     public function __construct($authToken, $organizationId = null)
     {
@@ -110,46 +118,10 @@ class ZohoBooks
     /**
      * Proxy any module call to the right api call
      * @param $name
-     * @return mixed
+     * @return Modules\Module
      */
     public function __get($name)
     {
-        $module = $this->getModuleName($name);
-
-        if (in_array($module, $this->availableModules)) {
-            $class =  '\\Webleit\\ZohoBooksApi\\Modules\\' . ucfirst((Inflector::camelize($module)));
-            return new $class($this->client);
-        }
-    }
-
-    /**
-     * Get the list of available modules
-     * @return array
-     */
-    public function getAvailableModules()
-    {
-        return $this->availableModules;
-    }
-
-    /**
-     * Get the module name by joining any camelcase module name and trying plural vs singular
-     * @param $moduleName
-     * @return string
-     */
-    protected function getModuleName($moduleName)
-    {
-        // Try also singular
-        $module = $moduleName;
-        if (in_array($moduleName, $this->availableModules)) {
-            $module = $moduleName;
-        } else {
-            $moduleName = Inflector::pluralize($moduleName);
-
-            if (in_array($moduleName, $this->availableModules)) {
-                $module = $moduleName;
-            }
-        }
-
-        return $module;
+        return $this->createModule($name);
     }
 }

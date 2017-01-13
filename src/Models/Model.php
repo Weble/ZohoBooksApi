@@ -3,7 +3,7 @@ namespace Webleit\ZohoBooksApi\Models;
 
 use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Contracts\Support\Arrayable;
-use Webleit\ZohoBooksApi\Modules\Module;
+use Webleit\ZohoBooksApi\Contracts\Module;
 
 abstract class Model implements \JsonSerializable, Arrayable
 {
