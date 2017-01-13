@@ -1,6 +1,8 @@
 <?php
 
 namespace Webleit\ZohoBooksApi\Modules;
+use Webleit\ZohoBooksApi\Client;
+use Webleit\ZohoBooksApi\Modules\Contacts\ContactPersons;
 
 /**
  * Class ChartOfAccounts
@@ -9,7 +11,7 @@ namespace Webleit\ZohoBooksApi\Modules;
 class ChartOfAccounts extends Module
 {
     /**
-     * @var Transa
+     * @var ContactPersons
      */
     public $contactpersons;
 

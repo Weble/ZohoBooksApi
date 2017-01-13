@@ -16,7 +16,7 @@ class Refunds extends Module
     /**
      * @return string
      */
-    protected function getModelClassName()
+    public function getModelClassName()
     {
         return  '\\Webleit\\ZohoBooksApi\\Models\\VendorPayment\\Refund';
     }
