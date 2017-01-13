@@ -97,3 +97,14 @@ $total = $invoice->total;
 
 will return a \Webleit\ZohoBooksApi\Models\Invoice object, which is Arrayable and Jsonable, and that can be therefore used in many ways.
 
+## Contributing
+
+Finding bugs, sending pull requests or improving the docs - any contribution is welcome and highly appreciated
+
+## Versioning
+
+Semantic Versioning Specification (SemVer) is used.
+
+## Copyright and License
+
+Copyright Weble Srl under the MIT license.
