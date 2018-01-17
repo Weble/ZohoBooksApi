@@ -60,9 +60,14 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      * @param string $id
      * @return Model
      */
-    public function get($id)
+    public function get($id, array $params = [])
     {
-        $item = $this->client->get($this->getUrl(), $id);
+        $item = $this->client->get($this->getUrl(), $id, null, $params);
+
+        if (!is_array($item)) {
+            return $item;
+        }
+
         $data = $item[Inflector::singularize($this->getResourceKey())];
 
         return $this->make($data);

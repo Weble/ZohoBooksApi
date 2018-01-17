@@ -16,5 +16,13 @@ use Illuminate\Support\Collection;
  */
 abstract class Document extends Model
 {
-
+    /**
+     * @return string the pdf content
+     */
+    public function getPdf()
+    {
+        return $this->module->get($this->getId(), [
+           'accept' => 'pdf'
+        ]);
+    }
 }

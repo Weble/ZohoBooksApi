@@ -198,13 +198,19 @@ class Client
      *
      * @throws ErrorResponseException
      *
-     * @return array
+     * @return array|string
      */
     protected function processResult(ResponseInterface $response)
     {
         try {
             $result = json_decode($response->getBody(), true);
         } catch (\InvalidArgumentException $e) {
+
+            // All ok, probably not json, like PDF?
+            if ($response->getStatusCode() >= 200 && $response->getStatusCode() <= 299) {
+                return (string) $response->getBody();
+            }
+
             $result = [
                 'message' => 'Internal API error: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase(),
             ];
