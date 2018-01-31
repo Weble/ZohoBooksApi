@@ -23,7 +23,7 @@ use Webleit\ZohoBooksApi\Modules\Settings as SettingsModules;
  * @property-read SettingsModules\AutoReminders $autoreminders;
  * @property-read SettingsModules\ManualReminders $manualreminders;
  */
-class Settings
+class Settings implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
 {
     use ProvidesModules;
 
@@ -40,7 +40,6 @@ class Settings
         'preferences',
         'estimates',
         'creditnotes',
-        'items',
         'currencies',
         'taxes',
         'taxgroups',

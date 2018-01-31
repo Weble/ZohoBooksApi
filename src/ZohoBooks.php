@@ -34,7 +34,7 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\Organizations $organizations
  * @property-read Modules\Items $items;
  */
-class ZohoBooks
+class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
 {
     use ProvidesModules;
 

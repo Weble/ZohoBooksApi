@@ -2,6 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Settings;
 
+use Webleit\ZohoBooksApi\Models\Settings\TaxAuthority;
 use Webleit\ZohoBooksApi\Modules\Module;
 
 /**
@@ -23,6 +24,6 @@ class TaxAuthorities extends Module
      */
     public function getModelClassName()
     {
-        return '\\Webleit\\ZohoBooksApi\\Models\\Settings\\TaxAuthorities';
+        return TaxAuthority::class;
     }
 }
