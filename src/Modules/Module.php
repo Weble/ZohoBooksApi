@@ -170,7 +170,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      * @param  array $data
      * @return Model
      */
-    protected function make($data = [])
+    public function make($data = [])
     {
         $class = $this->getModelClassName();
 
