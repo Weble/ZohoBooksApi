@@ -4,6 +4,7 @@ namespace Webleit\ZohoBooksApi\Modules;
 
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Modules\VendorPayments\Refunds;
+use Webleit\ZohoBooksApi\ZohoBooks;
 
 /**
  * Class VendorPayments
@@ -18,11 +19,11 @@ class VendorPayments extends Module
 
     protected $urlPath = 'vendorpayments';
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, ZohoBooks $zohoBook)
     {
-        parent::__construct($client);
+        parent::__construct($client, $zohoBook);
 
-        $this->refunds = new Refunds($client);
+        $this->refunds = new Refunds($client, $zohoBook);
     }
 
     /**

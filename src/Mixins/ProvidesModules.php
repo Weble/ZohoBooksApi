@@ -13,12 +13,9 @@ trait ProvidesModules
      */
     public function createModule($name)
     {
-        $module = $this->getModuleName($name);
+        $class = $this->modulesNamespace . $this->getModuleShortClassName($name);
 
-        if (in_array($module, $this->availableModules)) {
-            $class =  $this->modulesNamespace . ucfirst((Inflector::camelize($module)));
-            return new $class($this->client);
-        }
+        return new $class($this->client, $this);
     }
 
     /**
@@ -27,7 +24,24 @@ trait ProvidesModules
      */
     public function getAvailableModules()
     {
-        return $this->availableModules;
+        return array_keys($this->availableModules);
+    }
+
+    /**
+     * Get the class name of a module
+     * @return string
+     */
+    public function getModuleShortClassName($moduleName, $model = false)
+    {
+        $module = strtolower($this->getModuleName($moduleName));
+
+        if (isset($this->availableModules[$module])) {
+            $class =  $this->availableModules[$module];
+        } else {
+            $class = ucfirst(strtolower($moduleName));
+        }
+
+        return str_replace('|s', $model ? '' : 's', $class);
     }
 
     /**
@@ -39,12 +53,12 @@ trait ProvidesModules
     {
         // Try also singular
         $module = $moduleName;
-        if (in_array($moduleName, $this->availableModules)) {
+        if (isset($this->availableModules[$moduleName])) {
             $module = $moduleName;
         } else {
             $moduleName = Inflector::pluralize($moduleName);
 
-            if (in_array($moduleName, $this->availableModules)) {
+            if (isset($this->availableModules[$moduleName])) {
                 $module = $moduleName;
             }
         }

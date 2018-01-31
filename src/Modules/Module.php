@@ -5,6 +5,7 @@ namespace Webleit\ZohoBooksApi\Modules;
 use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
+use Webleit\ZohoBooksApi\ZohoBooks;
 use Webleit\ZohoBooksApi\Models\Model;
 
 /**
@@ -30,11 +31,17 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     protected $client;
 
     /**
+     * @var ZohoBooks
+     */
+    protected $zohoBook;
+
+    /**
      * Api constructor.
      */
-    function __construct(Client $client)
+    function __construct(Client $client, ZohoBooks $zohoBook)
     {
         $this->client = $client;
+        $this->zohoBook = $zohoBook;
     }
 
     /**
@@ -170,7 +177,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      * @param  array $data
      * @return Model
      */
-    public function make($data = [])
+    protected function make($data = [])
     {
         $class = $this->getModelClassName();
 
@@ -224,7 +231,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     protected function getPropertyList($property, $id = null, $class = null, $subProperty = null, $module = null)
     {
         if (!$class) {
-            $class = $this->getModelClassName() . '\\' . ucfirst(strtolower(Inflector::singularize($property)));
+            $class = $this->getModelClassName() . '\\' . $this->zohoBook->getModuleShortClassName($property, true);
         }
 
         if (!$module) {
@@ -259,7 +266,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function getModelClassName()
     {
         $className = (new \ReflectionClass($this))->getShortName();
-        $class = '\\Webleit\\ZohoBooksApi\\Models\\' . ucfirst(strtolower(Inflector::singularize($className)));
+        $class = '\\Webleit\\ZohoBooksApi\\Models\\' . $this->zohoBook->getModuleShortClassName($className, true);
 
         return $class;
     }

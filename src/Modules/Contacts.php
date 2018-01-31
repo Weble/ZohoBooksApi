@@ -7,6 +7,7 @@ use Webleit\ZohoBooksApi\Modules\Contacts\ContactPersons;
 use Webleit\ZohoBooksApi\Modules\Mixins\Commentable;
 use Webleit\ZohoBooksApi\Models\Contact;
 use Webleit\ZohoBooksApi\Modules\Mixins\Refundable;
+use Webleit\ZohoBooksApi\ZohoBooks;
 
 /**
  * Class Contacts
@@ -23,11 +24,11 @@ class Contacts extends Module
      */
     public $contactpersons;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, ZohoBooks $zohoBook)
     {
-        parent::__construct($client);
+        parent::__construct($client, $zohoBook);
 
-        $this->contactpersons = new ContactPersons($client);
+        $this->contactpersons = new ContactPersons($client, $zohoBook);
     }
 
     /**
