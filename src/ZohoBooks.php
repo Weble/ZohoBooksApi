@@ -34,7 +34,7 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\Organizations $organizations
  * @property-read Modules\Items $items;
  */
-class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
+class ZohoBooks
 {
     use ProvidesModules;
 
@@ -72,29 +72,29 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
      * @var array
      */
     protected $availableModules = [
-        'contacts',
-        'estimates',
-        'salesorders',
-        'invoices',
-        'recurringinvoices',
-        'creditnotes',
-        'customerpayments',
-        'expenses',
-        'recurringexpenses',
-        'purchaseorders',
-        'bills',
-        'vendorcredits',
-        'vendorpayments',
-        'bankaccounts',
-        'banktransactions',
-        'bankrules',
-        'chartofaccounts',
-        'journals',
-        'basecurrencyadjustment',
-        'projects',
-        'settings',
-        'organizations',
-        'items'
+        'contacts' => 'Contact|s',
+        'estimates' => 'Estimate|s',
+        'salesorders' => 'Salesorder|s',
+        'invoices' => 'Invoice|s',
+        'recurringinvoices' => 'RecurringInvoice|s',
+        'creditnotes' => 'Creditnote|s',
+        'customerpayments' => 'CustomerPayment|s',
+        'expenses' => 'Expense|s',
+        'recurringexpenses' => 'RecurringExpense|s',
+        'purchaseorders' => 'Purchaseorder|s',
+        'bills' => 'Bill|s',
+        'vendorcredits' => 'VendorCredit|s',
+        'vendorpayments' => 'VendorPayment|s',
+        'bankaccounts' => 'BankAccount|s',
+        'banktransactions' => 'BankTransaction|s',
+        'bankrules' => 'BankRule|s',
+        'chartofaccounts' => 'ChartOfAccount|s',
+        'journals' => 'Journal|s',
+        'basecurrencyadjustment' => 'BaseCurrencyAdjustment',
+        'projects' => 'Project|s',
+        'settings' => 'Setting|s',
+        'organizations' => 'Organization|s',
+        'items' => 'Item|s',
     ];
 
     /**

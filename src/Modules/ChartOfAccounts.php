@@ -3,6 +3,7 @@
 namespace Webleit\ZohoBooksApi\Modules;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Modules\Contacts\ContactPersons;
+use Webleit\ZohoBooksApi\ZohoBooks;
 
 /**
  * Class ChartOfAccounts
@@ -15,11 +16,11 @@ class ChartOfAccounts extends Module
      */
     public $contactpersons;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, ZohoBooks $zohoBook)
     {
-        parent::__construct($client);
+        parent::__construct($client, $zohoBook);
 
-        $this->contactpersons = new ContactPersons($client);
+        $this->contactpersons = new ContactPersons($client, $zohoBook);
     }
 
     /**

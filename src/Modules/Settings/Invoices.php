@@ -5,6 +5,7 @@ namespace Webleit\ZohoBooksApi\Modules\Settings;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Modules\PreferenceModule;
 use Webleit\ZohoBooksApi\Modules\Settings\Invoices\NotesAndTerms;
+use Webleit\ZohoBooksApi\ZohoBooks;
 
 /**
  * Class Preferences
@@ -17,11 +18,11 @@ class Invoices extends PreferenceModule
      */
     public $notesandterms;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, ZohoBooks $zohoBook)
     {
-        parent::__construct($client);
+        parent::__construct($client, $zohoBook);
 
-        $this->notesandterms = new NotesAndTerms($client);
+        $this->notesandterms = new NotesAndTerms($client, $zohoBook);
     }
 
     /**
