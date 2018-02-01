@@ -3,7 +3,6 @@
 namespace Webleit\ZohoBooksApi;
 
 use Webleit\ZohoBooksApi\Mixins\ProvidesModules;
-use Webleit\ZohoBooksApi\Modules\Contacts;
 use Webleit\ZohoBooksApi\Modules;
 
 /**
@@ -72,29 +71,29 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
      * @var array
      */
     protected $availableModules = [
-        'contacts',
-        'estimates',
-        'salesorders',
-        'invoices',
-        'recurringinvoices',
-        'creditnotes',
-        'customerpayments',
-        'expenses',
-        'recurringexpenses',
-        'purchaseorders',
-        'bills',
-        'vendorcredits',
-        'vendorpayments',
-        'bankaccounts',
-        'banktransactions',
-        'bankrules',
-        'chartofaccounts',
-        'journals',
-        'basecurrencyadjustment',
-        'projects',
-        'settings',
-        'organizations',
-        'items'
+        'contacts' => Modules\Contacts::class,
+        'estimates' => Modules\Estimates::class,
+        'salesorders' => Modules\SalesOrders::class,
+        'invoices' => Modules\Invoices::class,
+        'recurringinvoices' => Modules\RecurringInvoices::class,
+        'creditnotes' => Modules\CreditNotes::class,
+        'customerpayments' => Modules\CustomerPayments::class,
+        'expenses' => Modules\Expenses::class,
+        'recurringexpenses' => Modules\RecurringExpenses::class,
+        'purchaseorders' => Modules\PurchaseOrders::class,
+        'bills' => Modules\Bills::class,
+        'vendorcredits' => Modules\VendorCredits::class,
+        'vendorpayments' => Modules\VendorPayments::class,
+        'bankaccounts' => Modules\BankAccounts::class,
+        'banktransactions' => Modules\BankTransactions::class,
+        'bankrules' => Modules\BankRules::class,
+        'chartofaccounts' => Modules\ChartOfAccounts::class,
+        'journals' => Modules\Journals::class,
+        'basecurrencyadjustment' => Modules\BaseCurrencyAdjustment::class,
+        'projects' => Modules\Projects::class,
+        'settings' => Modules\Settings::class,
+        'organizations' => Modules\Organizations::class,
+        'items' => Modules\Items::class
     ];
 
     /**
