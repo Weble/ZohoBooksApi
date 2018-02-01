@@ -36,18 +36,18 @@ class Settings implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
      * @var array
      */
     protected $availableModules = [
-        'invoices',
-        'preferences',
-        'estimates',
-        'creditnotes',
-        'currencies',
-        'taxes',
-        'taxgroups',
-        'taxauthorities',
-        'taxexemptions',
-        'openingbalances',
-        'autoreminders',
-        'manualreminders'
+        'invoices' => Settings\Invoices::class,
+        'preferences' => Settings\Preferences::class,
+        'estimates' => Settings\Estimates::class,
+        'creditnotes' => Settings\CreditNotes::class,
+        'currencies' => Settings\Currencies::class,
+        'taxes' => Settings\Taxes::class,
+        'taxgroups' => Settings\TaxGroups::class,
+        'taxauthorities' => Settings\TaxAuthorities::class,
+        'taxexemptions' => Settings\TaxExemptions::class,
+        'openingbalances' => Settings\OpeningBalances::class,
+        'autoreminders' => Settings\AutoReminders::class,
+        'manualreminders' => Settings\ManualReminders::class
     ];
 
     /**
