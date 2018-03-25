@@ -33,6 +33,12 @@ class Client
     protected $organizationId;
 
     /**
+     * @var boolean
+     */
+    protected $debug = false;
+    protected $logs = [];
+
+    /**
      * Client constructor.
      *
      * @param string|null $authToken
@@ -67,6 +73,10 @@ class Client
      */
     public function getList($url, $organizationId = null, array $filters = [])
     {
+        $this->addLog('filters', $result);
+        $this->addLog('type', 'getList');
+        $this->addLog('url', $url);
+
         return $this->processResult(
             $this->httpClient->get($url, ['query' => array_merge($this->getParams($organizationId), $filters)])
         );
@@ -86,6 +96,10 @@ class Client
             $url .= '/' . $id;
         }
 
+        $this->addLog('getParams', $params);
+        $this->addLog('type', 'get');
+        $this->addLog('url', $url);
+
         return $this->processResult(
             $this->httpClient->get($url, ['query' => $this->getParams($organizationId) + $params])
         );
@@ -102,6 +116,10 @@ class Client
      */
     public function rawGet($url, $organizationId = null, array $params = [])
     {
+        $this->addLog('getParams', $params);
+        $this->addLog('type', 'rawGet');
+        $this->addLog('url', $url);
+
         try {
             $response = $this->httpClient->get($url, ['query' => $this->getParams($organizationId) + $params]);
             return $response->getBody();
@@ -120,6 +138,11 @@ class Client
      */
     public function post($url, $organizationId = null, array $data = [], array $params = [])
     {
+        $this->addLog('postParams', $params);
+        $this->addLog('data', $data);
+        $this->addLog('type', 'post');
+        $this->addLog('url', $url);
+
         return $this->processResult($this->httpClient->post(
             $url,
             [
@@ -143,6 +166,11 @@ class Client
             $url .= '/' . $id;
         }
 
+        $this->addLog('postParams', $params);
+        $this->addLog('data', $data);
+        $this->addLog('type', 'put');
+        $this->addLog('url', $url);
+
         return $this->processResult($this->httpClient->put(
             $url,
             [
@@ -163,6 +191,9 @@ class Client
         if ($id !== null) {
             $url .= '/' . $id;
         }
+
+        $this->addLog('type', 'delete');
+        $this->addLog('url', $url);
 
         return $this->processResult(
             $this->httpClient->delete($url, ['query' => $this->getParams($organizationId)])
@@ -190,6 +221,8 @@ class Client
             $params['JSONString'] = json_encode($data);
         }
 
+        $this->addLog('params', $params);
+
         return $params;
     }
 
@@ -204,6 +237,7 @@ class Client
     {
         try {
             $result = json_decode($response->getBody(), true);
+            $this->addLog('result', $result);
         } catch (\InvalidArgumentException $e) {
 
             // All ok, probably not json, like PDF?
@@ -214,6 +248,8 @@ class Client
             $result = [
                 'message' => 'Internal API error: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase(),
             ];
+
+            $this->addLog('result', $result);
         }
 
         if (isset($result['code']) && 0 == $result['code']) {
@@ -254,6 +290,26 @@ class Client
             $authToken = @$matches['token'];
         }
 
+        $this->addLog('authToken', $authToken);
+
         return $authToken;
+    }
+
+    protected function addLog($key, $value)
+    {
+        if($this->debug)
+        {
+            $this->logs[$key] = $value;
+        }
+    }
+
+    public function getLogs()
+    {
+        return $this->logs;
+    }
+
+    public function enableDebug()
+    {
+        $this->debug = true;
     }
 }
