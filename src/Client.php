@@ -35,8 +35,8 @@ class Client
     /**
      * @var boolean
      */
-    protected $debug = false;
-    protected $logs = [];
+    public $debug = false;
+    public $logs = [];
 
     /**
      * Client constructor.
@@ -301,15 +301,5 @@ class Client
         {
             $this->logs[$key] = $value;
         }
-    }
-
-    public function getLogs()
-    {
-        return $this->logs;
-    }
-
-    public function enableDebug()
-    {
-        $this->debug = true;
     }
 }

@@ -124,4 +124,14 @@ class ZohoBooks
     {
         return $this->createModule($name);
     }
+
+    public function getLogs()
+    {
+        return $this->client->logs;
+    }
+
+    public function enableDebug()
+    {
+        $this->client->debug = true;
+    }
 }
