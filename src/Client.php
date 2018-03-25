@@ -73,7 +73,7 @@ class Client
      */
     public function getList($url, $organizationId = null, array $filters = [])
     {
-        $this->addLog('filters', $result);
+        $this->addLog('filters', $filters);
         $this->addLog('type', 'getList');
         $this->addLog('url', $url);
 
