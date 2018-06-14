@@ -3,7 +3,7 @@
     "description": "Zoho Books API v3 - PHP SDK",
     "license": "MIT",
     "keywords": ["zoho", "books", "zohobooks", "api"],
-    "version": "2.1.3",
+    "version": "2.1.5",
     "authors": [
         {
             "name": "Daniele Rosario",
