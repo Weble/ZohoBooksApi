@@ -100,8 +100,9 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
      * ZohoBooksApi constructor.
      * @param string $authToken         Zoho Books Api Token (See https://www.zoho.com/books/api/v3/)
      * @param string $organizationId    The organization id you want to deal with (See https://www.zoho.com/books/api/v3/)
+     * @param string $region            The API Region. Can be US or EU
      */
-    public function __construct($authToken, $organizationId = null)
+    public function __construct($authToken, $organizationId = null, $region = 'US')
     {
         $this->client = new Client($authToken);
 
@@ -112,6 +113,7 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
 
         $this->organizationId = $organizationId;
         $this->client->setOrganizationId($organizationId);
+        $this->client->setRegion($region);
     }
 
     /**
