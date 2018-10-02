@@ -14,7 +14,8 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
  */
 class Client
 {
-    const ENDPOINT = 'https://books.zoho.com/api/v3/';
+    const ENDPOINT_EU = 'https://books.zoho.eu/api/v3/';
+    const ENDPOINT_US = 'https://books.zoho.com/api/v3/';
 
     /**
      * @var string
@@ -33,6 +34,11 @@ class Client
     protected $organizationId;
 
     /**
+     * @var string
+     */
+    protected $region = 'US';
+
+    /**
      * Client constructor.
      *
      * @param string|null $authToken
@@ -41,7 +47,7 @@ class Client
      */
     public function __construct($authToken = null, $email = null, $password = null)
     {
-        $this->httpClient = new \GuzzleHttp\Client(['base_uri' => self::ENDPOINT, 'http_errors' => false]);
+        $this->createClient();
 
         if (!$authToken) {
             $authToken = $this->auth($email, $password);
@@ -51,11 +57,66 @@ class Client
     }
 
     /**
-     * @param string $organizationId
+     * @param string $region
+     * @return $this
+     */
+    public function setRegion($region = 'US')
+    {
+        $this->region = $region;
+        $this->createClient();
+
+        return $this;
+    }
+
+    /**
+     * @return \GuzzleHttp\Client|string
+     */
+    protected function createClient()
+    {
+        $this->httpClient = new \GuzzleHttp\Client(['base_uri' => $this->getEndPoint(), 'http_errors' => false]);
+        return $this->httpClient;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndPoint()
+    {
+        switch ($this->region) {
+            case 'EU':
+                return self::ENDPOINT_EU;
+                break;
+            case 'US':
+            default:
+                return self::ENDPOINT_US;
+                break;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganizationId ()
+    {
+        return $this->organizationId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegion ()
+    {
+        return $this->region;
+    }
+
+    /**
+     * @param $organizationId
+     * @return $this
      */
     public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
+        return $this;
     }
 
     /**
