@@ -19,12 +19,6 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     const RESPONSE_OPTION_PAGINATION_ONLY = 2;
 
     /**
-     * Base Url of the Zoho Books Api
-     * @var string
-     */
-    const ENDPOINT = 'https://books.zoho.com/api/v3/';
-
-    /**
      * @var Client
      */
     protected $client;
@@ -155,7 +149,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function getUrl()
     {
-        return self::ENDPOINT . $this->getUrlPath();
+        return $this->client->getEndPoint() . $this->getUrlPath();
     }
 
     /**
