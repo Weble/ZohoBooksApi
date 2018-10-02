@@ -14,7 +14,13 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
  */
 class Client
 {
+    /**
+     *
+     */
     const ENDPOINT_EU = 'https://books.zoho.eu/api/v3/';
+    /**
+     *
+     */
     const ENDPOINT_US = 'https://books.zoho.com/api/v3/';
 
     /**
@@ -129,7 +135,7 @@ class Client
     public function getList($url, $organizationId = null, array $filters = [])
     {
         return $this->processResult(
-            $this->httpClient->get($url, ['query' => array_merge($this->getParams($organizationId), $filters)])
+            $this->httpClient->get($url, $this->getOptions(['query' => array_merge($this->getParams($organizationId), $filters)]))
         );
     }
 
@@ -148,7 +154,7 @@ class Client
         }
 
         return $this->processResult(
-            $this->httpClient->get($url, ['query' => $this->getParams($organizationId) + $params])
+            $this->httpClient->get($url, $this->getOptions(['query' => $this->getParams($organizationId) + $params]))
         );
     }
 
@@ -164,7 +170,7 @@ class Client
     public function rawGet($url, $organizationId = null, array $params = [])
     {
         try {
-            $response = $this->httpClient->get($url, ['query' => $this->getParams($organizationId) + $params]);
+            $response = $this->httpClient->get($url, $this->getOptions(['query' => $this->getParams($organizationId) + $params]));
             return $response->getBody();
         } catch (\InvalidArgumentException $e) {
             throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $e);
@@ -183,9 +189,9 @@ class Client
     {
         return $this->processResult($this->httpClient->post(
             $url,
-            [
+            $this->getOptions([
                 'query' => $this->getParams($organizationId, $data) + $params,
-            ]
+            ])
         ));
     }
 
@@ -206,9 +212,9 @@ class Client
 
         return $this->processResult($this->httpClient->put(
             $url,
-            [
+            $this->getOptions([
                 'query' => $this->getParams($organizationId, $data) + $params,
-            ]
+            ])
         ));
     }
 
@@ -226,7 +232,7 @@ class Client
         }
 
         return $this->processResult(
-            $this->httpClient->delete($url, ['query' => $this->getParams($organizationId)])
+            $this->httpClient->delete($url, $this->getOptions(['query' => $this->getParams($organizationId)]))
         );
     }
 
@@ -252,6 +258,19 @@ class Client
         }
 
         return $params;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    protected function getOptions($params = [])
+    {
+        return array_merge([
+            'headers' => [
+                'Authorization: Zoho-authtoken ' . $this->authToken
+            ]
+        ], $params);
     }
 
     /**
