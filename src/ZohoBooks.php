@@ -125,4 +125,14 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
     {
         return $this->createModule($name);
     }
+
+    /**
+     * Get Client Class constructor.
+     * @return \Client|object class
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+    
 }
