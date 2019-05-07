@@ -17,7 +17,15 @@ class Client
     /**
      *
      */
+    const ENDPOINT_CN = 'https://books.zoho.com.cn/api/v3/';
+    /**
+     *
+     */
     const ENDPOINT_EU = 'https://books.zoho.eu/api/v3/';
+    /**
+     *
+     */
+    const ENDPOINT_IN = 'https://books.zoho.in/api/v3/';
     /**
      *
      */
@@ -89,6 +97,12 @@ class Client
     public function getEndPoint()
     {
         switch ($this->region) {
+            case 'CN':
+                return self::ENDPOINT_CN;
+                break;
+            case 'IN':
+                return self::ENDPOINT_IN;
+                break;
             case 'EU':
                 return self::ENDPOINT_EU;
                 break;
