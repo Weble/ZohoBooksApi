@@ -7,8 +7,6 @@ use Webleit\ZohoBooksApi\Models\Model;
 /**
  * Class Person
  * @package Webleit\ZohoBooksApi\Models\Contact
- *
- * @method  bool markAsPrimary()
  */
 class Address extends Model
 {
