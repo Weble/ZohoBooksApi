@@ -7,7 +7,7 @@ use Webleit\ZohoBooksApi\Modules\Module;
 
 /**
  * Class Tasks
- * @package Webleit\ZohoBooksApi\Modules\Projects
+ * @package Webleit\ZohoBooksApi\Modules\Contacts
  *
  * @method Contact\Address get($id)
  */
