@@ -9,7 +9,7 @@ use Webleit\ZohoBooksApi\Modules;
  * Class ZohoBooks
  * @package Webleit\ZohoBooksApi
  *
- * @property-read Contacts $contacts
+ * @property-read Modules\Contacts $contacts
  * @property-read Modules\Module $estimates
  * @property-read Modules\SalesOrders $salesorders
  * @property-read Modules\Invoices $invoices

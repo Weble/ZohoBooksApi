@@ -1,9 +1,9 @@
 {
-    "name": "alfreddagenais/zohobooksapi",
+    "name": "webleit/zohobooksapi",
     "description": "Zoho Books API v3 - PHP SDK",
     "license": "MIT",
     "keywords": ["zoho", "books", "zohobooks", "api"],
-    "version": "2.2.3",
+    "version": "2.3.1",
     "authors": [
         {
             "name": "Daniele Rosario",
