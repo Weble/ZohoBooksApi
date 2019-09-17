@@ -1,0 +1,9 @@
+{
+  "client_id" : "",
+  "client_secret": "",
+  "grant_token": "",
+  "refresh_token" : "",
+  "access_token": "",
+  "auth_token": "",
+  "organization_id": ""
+}

@@ -9,7 +9,7 @@ use Webleit\ZohoBooksApi\Modules;
  * Class ZohoBooks
  * @package Webleit\ZohoBooksApi
  *
- * @property-read Contacts $contacts
+ * @property-read Modules\Contacts $contacts
  * @property-read Modules\Module $estimates
  * @property-read Modules\SalesOrders $salesorders
  * @property-read Modules\Invoices $invoices
@@ -102,18 +102,9 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
      * @param string $organizationId    The organization id you want to deal with (See https://www.zoho.com/books/api/v3/)
      * @param string $region            The API Region. Can be US or EU
      */
-    public function __construct($authToken, $organizationId = null, $region = 'US')
+    public function __construct($clientId, $clientSecret, $refreshToken = '')
     {
-        $this->client = new Client($authToken);
-
-        // Set the default organization id to the default org in zoho books
-        if (!$organizationId) {
-            $organizationId = $this->organizations->getDefaultOrganizationId();
-        }
-
-        $this->organizationId = $organizationId;
-        $this->client->setOrganizationId($organizationId);
-        $this->client->setRegion($region);
+        $this->client = new Client($clientId, $clientSecret, $refreshToken);
     }
 
     /**
@@ -133,6 +124,12 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
     public function getClient()
     {
         return $this->client;
+    }
+
+    public function setOrganizationId($id)
+    {
+        $this->client->setOrganizationId($id);
+        return $this;
     }
     
 }

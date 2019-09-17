@@ -1,9 +1,8 @@
 {
-    "name": "alfreddagenais/zohobooksapi",
+    "name": "webleit/zohobooksapi",
     "description": "Zoho Books API v3 - PHP SDK",
     "license": "MIT",
     "keywords": ["zoho", "books", "zohobooks", "api"],
-    "version": "2.2.3",
     "authors": [
         {
             "name": "Daniele Rosario",
@@ -14,7 +13,8 @@
         "php" : ">=5.5.0",
         "guzzlehttp/guzzle": "~6.0",
         "doctrine/inflector": "^1.1",
-        "tightenco/collect": "^5.3"
+        "tightenco/collect": "^5.3",
+        "weble/zohoclient": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "5.5.*"
@@ -23,5 +23,7 @@
         "psr-4": {
             "Webleit\\ZohoBooksApi\\": "src"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
