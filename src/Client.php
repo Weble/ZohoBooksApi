@@ -4,6 +4,7 @@ namespace Webleit\ZohoBooksApi;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Weble\ZohoClient\OAuthClient;
 use Webleit\ZohoBooksApi\Exceptions\AuthException;
 use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
 
@@ -14,21 +15,10 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
  */
 class Client
 {
-    /**
-     *
-     */
+
     const ENDPOINT_CN = 'https://books.zoho.com.cn/api/v3/';
-    /**
-     *
-     */
     const ENDPOINT_EU = 'https://books.zoho.eu/api/v3/';
-    /**
-     *
-     */
     const ENDPOINT_IN = 'https://books.zoho.in/api/v3/';
-    /**
-     *
-     */
     const ENDPOINT_US = 'https://books.zoho.com/api/v3/';
 
     /**
@@ -37,9 +27,9 @@ class Client
     protected $httpClient;
 
     /**
-     * @var string
+     * @var OAuthClient
      */
-    protected $authToken;
+    protected $oAuthClient;
 
     /**
      * default organization id
@@ -50,31 +40,27 @@ class Client
     /**
      * @var string
      */
-    protected $region = 'US';
+    protected $region = OAuthClient::DC_US;
 
     /**
      * Client constructor.
-     *
-     * @param string|null $authToken
-     * @param string|null $email
-     * @param string|null $password
+     * @param $clientId
+     * @param $clientSecret
+     * @param $refreshToken
      */
-    public function __construct($authToken = null, $email = null, $password = null)
+    public function __construct($clientId, $clientSecret, $refreshToken = null)
     {
         $this->createClient();
 
-        if (!$authToken) {
-            $authToken = $this->auth($email, $password);
-        }
-
-        $this->authToken = $authToken;
+        $this->oAuthClient = new OAuthClient($clientId, $clientSecret, $refreshToken);
+        $this->oAuthClient->setRefreshToken($refreshToken);
     }
 
     /**
      * @param string $region
      * @return $this
      */
-    public function setRegion($region = 'US')
+    public function setRegion($region = OAuthClient::DC_US)
     {
         $this->region = $region;
         $this->createClient();
@@ -97,16 +83,16 @@ class Client
     public function getEndPoint()
     {
         switch ($this->region) {
-            case 'CN':
+            case OAuthClient::DC_CN:
                 return self::ENDPOINT_CN;
                 break;
-            case 'IN':
+            case OAuthClient::DC_IN:
                 return self::ENDPOINT_IN;
                 break;
-            case 'EU':
+            case OAuthClient::DC_EU:
                 return self::ENDPOINT_EU;
                 break;
-            case 'US':
+            case OAuthClient::DC_US:
             default:
                 return self::ENDPOINT_US;
                 break;
@@ -262,10 +248,11 @@ class Client
             $organizationId = $this->organizationId;
         }
 
-        $params = [
-            'authtoken' => $this->authToken,
-            'organization_id' => $organizationId,
-        ];
+        $params = [];
+
+        if ($organizationId) {
+            $params['organization_id'] = $organizationId;
+        }
 
         if ($data) {
             $params['JSONString'] = json_encode($data);
@@ -282,9 +269,19 @@ class Client
     {
         return array_merge([
             'headers' => [
-                'Authorization: Zoho-authtoken ' . $this->authToken
+                'Authorization' => 'Zoho-oauthtoken '.$this->oAuthClient->getAccessToken()
             ]
         ], $params);
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array([$this->oAuthClient, $name], $arguments);
     }
 
     /**
@@ -326,39 +323,5 @@ class Client
         }
 
         throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $result['message']);
-    }
-
-    /**
-     * @param string|null $email
-     * @param string|null $password
-     *
-     * @throws AuthException
-     *
-     * @return string
-     */
-    private function auth($email, $password)
-    {
-        if (null === $email || null === $password) {
-            throw new AuthException('Please provide authToken OR Email & Password for auto authentication.');
-        }
-
-        $response = $this->httpClient->post(
-            'https://accounts.zoho.com/apiauthtoken/nb/create',
-            [
-                'form_params' => [
-                    'SCOPE' => 'ZohoBooks/booksapi',
-                    'EMAIL_ID' => $email,
-                    'PASSWORD' => $password,
-                ],
-            ]
-        );
-
-        $authToken = '';
-
-        if (preg_match('/AUTHTOKEN=(?<token>[a-z0-9]+)/', (string)$response->getBody(), $matches)) {
-            $authToken = @$matches['token'];
-        }
-
-        return $authToken;
     }
 }
