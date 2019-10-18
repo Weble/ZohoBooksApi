@@ -34,6 +34,14 @@ class CustomerPayments extends Module
     }
 
     /**
+     * @return string
+     */
+    protected function getResourceKey()
+    {
+        return 'customerpayments';
+    }
+
+    /**
      * @param $id
      * @return \Illuminate\Support\Collection
      */

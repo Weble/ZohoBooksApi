@@ -79,4 +79,13 @@ class ApiTest extends TestCase
         $list = self::$zoho->contacts->getList();
         $this->assertTrue(count($list) > 0);
     }
+
+    /**
+     * @test
+     */
+    public function canGetListOfCustomerPayments()
+    {
+        $list = self::$zoho->customerpayments->getList();
+        $this->assertTrue(count($list) > 0);
+    }
 }
