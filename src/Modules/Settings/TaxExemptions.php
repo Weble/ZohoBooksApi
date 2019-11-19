@@ -25,4 +25,16 @@ class TaxExemptions extends Module
     {
         return '\\Webleit\\ZohoBooksApi\\Models\\Settings\\TaxExemption';
     }
+
+    /**
+     * Return Zoho API name
+     * 
+     * Note that this is different from the request. The request
+     * is for 'taxexemptions', but it returns an array with a key
+     * of "tax_exemptions"
+     */
+    public function getApiName()
+    {
+        return "tax_exemptions";
+    }
 }

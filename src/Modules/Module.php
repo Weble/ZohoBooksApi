@@ -41,7 +41,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
         $list = $this->client->getList($this->getUrl(), null, $params);
 
         $collection = new Collection($list[$this->getResourceKey()]);
-        $collection = $collection->mapWithKeys(function($item) {
+        $collection = $collection->mapWithKeys(function ($item) {
             $item = $this->make($item);
             return [$item->getId() => $item];
         });
@@ -157,7 +157,11 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     protected function getResourceKey()
     {
-        return strtolower($this->getName());
+        if (method_exists($this, 'getApiName')) {
+            return $this->getApiName();
+        } else {
+            return strtolower($this->getName());
+        }
     }
 
     /**
