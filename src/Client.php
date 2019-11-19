@@ -190,7 +190,8 @@ class Client
         return $this->processResult($this->httpClient->post(
             $url,
             $this->getOptions([
-                'query' => $this->getParams($organizationId, $data) + $params,
+                'query' => $this->getParams($organizationId) + $params,
+                'form_params' => [ 'JSONString' => json_encode($data) ]
             ])
         ));
     }
