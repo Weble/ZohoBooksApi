@@ -132,9 +132,8 @@ abstract class Model implements \JsonSerializable, Arrayable
     {
         if (method_exists($this->module, 'getApiKeyName')) {
             return $this->module->getApiKeyName();
-        } else {
-            return strtolower($this->getName() . '_id');
         }
+        return strtolower($this->getName() . '_id');
     }
 
     /**

@@ -153,15 +153,18 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     }
 
     /**
+     * This is used to determine the key of the returned data
+     *
+     * Note that some modules (eg, Settings\TaxExemptions) override
+     * this value, because zoho does not return the data with the
+     * expected key. If you are looking at this code, you may also
+     * need to override the api key name, too.
+     *
      * @return string
      */
-    protected function getResourceKey()
+    public function getResourceKey()
     {
-        if (method_exists($this, 'getApiName')) {
-            return $this->getApiName();
-        } else {
-            return strtolower($this->getName());
-        }
+        return strtolower($this->getName());
     }
 
     /**

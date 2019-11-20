@@ -29,11 +29,11 @@ class TaxExemptions extends Module
     /**
      * Return Zoho API name
      *
-     * Note that this is different from the request. The request
-     * is for 'taxexemptions', but it returns an array with a key
-     * of "tax_exemptions"
+     * This overrides getResourceKey in Module, which normally
+     * returns strtolower of name. However, Zoho returns "tax_exemptions"
+     * instead of the expected 'taxexceptions' key.
      */
-    public function getApiName()
+    public function getResourceKey()
     {
         return "tax_exemptions";
     }
