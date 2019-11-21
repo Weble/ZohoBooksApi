@@ -41,7 +41,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
         $list = $this->client->getList($this->getUrl(), null, $params);
 
         $collection = new Collection($list[$this->getResourceKey()]);
-        $collection = $collection->mapWithKeys(function($item) {
+        $collection = $collection->mapWithKeys(function ($item) {
             $item = $this->make($item);
             return [$item->getId() => $item];
         });
@@ -153,9 +153,16 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     }
 
     /**
+     * This is used to determine the key of the returned data
+     *
+     * Note that some modules (eg, Settings\TaxExemptions) override
+     * this value, because zoho does not return the data with the
+     * expected key. If you are looking at this code, you may also
+     * need to override the api key name, too.
+     *
      * @return string
      */
-    protected function getResourceKey()
+    public function getResourceKey()
     {
         return strtolower($this->getName());
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Webleit\ZohoBooksApi\Models;
 
 use Doctrine\Common\Inflector\Inflector;
@@ -129,6 +130,9 @@ abstract class Model implements \JsonSerializable, Arrayable
      */
     public function getKeyName()
     {
+        if (method_exists($this->module, 'getApiKeyName')) {
+            return $this->module->getApiKeyName();
+        }
         return strtolower($this->getName() . '_id');
     }
 
