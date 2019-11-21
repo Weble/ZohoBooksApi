@@ -1,3 +1,6 @@
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/webleit/zohobooksapi.svg?style=flat-square)](https://packagist.org/packages/webleit/zohobooksapi)
+[![Total Downloads](https://img.shields.io/packagist/dt/webleit/zohobooksapi.svg?style=flat-square)](https://packagist.org/packages/webleit/zohobooksapi)
+
 # Zoho Books API v3 - PHP SDK
 
 This Library is a SDK in PHP that simplifies the usage of the Zoho Books Api version 3 (https://www.zoho.com/books/api/v3/)
