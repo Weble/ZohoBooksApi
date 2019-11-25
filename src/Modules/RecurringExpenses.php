@@ -36,4 +36,17 @@ class RecurringExpenses extends Documents
     {
         return $this->getPropertyList('expenses', $id);
     }
+
+    /**
+     * Override returned key
+     *
+     * This overrides the key that is returned from zoho, as they
+     * send back 'recurring_expenses' instead of 'recurringexpenses'
+     *
+     * @return string
+     */
+    public function getResourceKey()
+    {
+        return 'recurring_expenses';
+    }
 }
