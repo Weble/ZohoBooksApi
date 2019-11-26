@@ -187,6 +187,13 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     }
 
     /**
+     * Mark something with a status
+     *
+     * Note that as of 2019-11-27, Zoho Books API errors if you don't
+     * provide a JSONString param. It can't be empty.
+     *
+     * See https://github.com/Weble/ZohoBooksApi/issues/33
+     *
      * @param $id
      * @param $status
      * @param string $key
@@ -194,7 +201,11 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function markAs($id, $status, $key = 'status')
     {
-        $this->client->post($this->getUrl() . '/' . $id . '/' . $key . '/' . $status);
+        $this->client->post(
+            $this->getUrl() . '/' . $id . '/' . $key . '/' . $status,
+            null,
+            ["random" => "data"]
+        );
         // If we arrive here without exceptions, everything went well
         return true;
     }
