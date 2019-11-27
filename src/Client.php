@@ -102,7 +102,7 @@ class Client
     /**
      * @return string
      */
-    public function getOrganizationId ()
+    public function getOrganizationId()
     {
         return $this->organizationId;
     }
@@ -110,7 +110,7 @@ class Client
     /**
      * @return string
      */
-    public function getRegion ()
+    public function getRegion()
     {
         return $this->region;
     }
@@ -191,7 +191,7 @@ class Client
             $url,
             $this->getOptions([
                 'query' => $this->getParams($organizationId) + $params,
-                'form_params' => [ 'JSONString' => json_encode($data) ]
+                'form_params' => ['JSONString' => json_encode($data)]
             ])
         ));
     }
@@ -214,7 +214,8 @@ class Client
         return $this->processResult($this->httpClient->put(
             $url,
             $this->getOptions([
-                'query' => $this->getParams($organizationId, $data) + $params,
+                'query' => $this->getParams($organizationId) + $params,
+                'form_params' => ['JSONString' => json_encode($data)]
             ])
         ));
     }
@@ -270,7 +271,7 @@ class Client
     {
         return array_merge([
             'headers' => [
-                'Authorization' => 'Zoho-oauthtoken '.$this->oAuthClient->getAccessToken()
+                'Authorization' => 'Zoho-oauthtoken ' . $this->oAuthClient->getAccessToken()
             ]
         ], $params);
     }

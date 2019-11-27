@@ -32,7 +32,7 @@ class OpeningBalances extends Module
     /**
      * @return string
      */
-    protected function getResourceKey()
+    public function getResourceKey()
     {
         return 'opening_balance';
     }

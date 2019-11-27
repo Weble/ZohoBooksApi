@@ -70,4 +70,17 @@ class VendorCredits extends Module
     {
         return $this->markAs($id, 'void');
     }
+
+    /**
+     * Override returned key
+     *
+     * This overrides the key that is returned from zoho, as they
+     * send back 'vendor_credits' instead of 'vendorcredits'
+     *
+     * @return string
+     */
+    public function getResourceKey()
+    {
+        return 'vendor_credits';
+    }
 }

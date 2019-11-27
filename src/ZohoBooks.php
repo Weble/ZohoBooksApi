@@ -31,7 +31,8 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\Projects $projects
  * @property-read Modules\Settings $settings
  * @property-read Modules\Organizations $organizations
- * @property-read Modules\Items $items;
+ * @property-read Modules\Items $items
+ * @property-read Modules\Users $users
  */
 class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
 {
@@ -93,7 +94,8 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
         'projects' => Modules\Projects::class,
         'settings' => Modules\Settings::class,
         'organizations' => Modules\Organizations::class,
-        'items' => Modules\Items::class
+        'items' => Modules\Items::class,
+        'users' => Modules\Users::class,
     ];
 
     /**
@@ -131,5 +133,4 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
         $this->client->setOrganizationId($id);
         return $this;
     }
-    
 }

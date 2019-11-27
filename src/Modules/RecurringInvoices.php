@@ -25,4 +25,17 @@ class RecurringInvoices extends Documents
     {
         return $this->markAs($id, 'resume');
     }
+
+    /**
+     * Override returned key
+     *
+     * This overrides the key that is returned from zoho, as they
+     * send back 'recurring_invoices' instead of 'recurringinvoices'
+     *
+     * @return string
+     */
+    public function getResourceKey()
+    {
+        return 'recurring_invoices';
+    }
 }

@@ -24,7 +24,7 @@ class ExchangeRates extends SubModule
     /**
      * @return string
      */
-    protected function getResourceKey()
+    public function getResourceKey()
     {
         return 'exchange_rates';
     }
