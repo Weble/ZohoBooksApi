@@ -2,6 +2,8 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Settings;
 
+use Weble\ZohoClient\Exception\ApiError;
+use Webleit\ZohoBooksApi\Models\Settings\TaxGroup;
 use Webleit\ZohoBooksApi\Modules\Module;
 
 /**
@@ -10,6 +12,16 @@ use Webleit\ZohoBooksApi\Modules\Module;
  */
 class TaxGroups extends Module
 {
+    /**
+     * @param  array  $params
+     * @return \Illuminate\Support\Collection|void
+     * @throws ApiError
+     */
+    public function getList($params = [])
+    {
+        throw new ApiError('The getList() api for TaxGroups is not implemented in Zoho APIs');
+    }
+
     /**
      * @return string
      */
@@ -23,6 +35,6 @@ class TaxGroups extends Module
      */
     public function getModelClassName()
     {
-        return '\\Webleit\\ZohoBooksApi\\Models\\Settings\\TaxGroup';
+        return TaxGroup::class;
     }
 }
