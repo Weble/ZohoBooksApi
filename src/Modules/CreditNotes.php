@@ -37,7 +37,7 @@ class CreditNotes extends Documents
      */
     public function applyToInvoices($id, $data)
     {
-	throw new \Exception("This does not work, and the documentation is wrong. Use invoices->applyCreditNote()");
+        throw new \Exception("This does not work, and the documentation is wrong. Use invoices->applyCreditNote()");
         $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', null, $data);
 
         return $data['apply_to_invoices']['invoices'];
