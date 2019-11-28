@@ -38,7 +38,7 @@ class CustomerPayments extends Module
      */
     public function getResourceKey()
     {
-        return 'customerpayments';
+        return 'payment';
     }
 
     /**

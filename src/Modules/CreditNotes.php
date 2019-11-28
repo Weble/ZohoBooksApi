@@ -37,7 +37,7 @@ class CreditNotes extends Documents
      */
     public function applyToInvoices($id, $data)
     {
-        $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', $data);
+        $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', null, $data);
 
         return $data['apply_to_invoices']['invoices'];
     }
