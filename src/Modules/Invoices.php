@@ -20,7 +20,7 @@ class Invoices extends Documents
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        $this->client->post($this->getUrl() . '/paymentreminder', [], $params);
+        $this->client->post($this->getUrl() . '/paymentreminder', null, [], $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -51,7 +51,7 @@ class Invoices extends Documents
      */
     public function sendPaymentReminder($id, $data = [], $params = [])
     {
-        $this->client->post($this->getUrl() . '/' . $id . '/paymentreminder', $data, $params);
+        $this->client->post($this->getUrl() . '/' . $id . '/paymentreminder', null, $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
