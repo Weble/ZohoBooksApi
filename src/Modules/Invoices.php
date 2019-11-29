@@ -14,14 +14,14 @@ class Invoices extends Documents
     use Creditable, Payable;
 
     /**
-     * @param array $ids
+     * @param  array  $ids
      * @return bool
      */
     public function sendPaymentReminderList($ids = [])
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        $this->client->post($this->getUrl() . '/paymentreminder', null, [], $params);
+        $this->client->post($this->getUrl().'/paymentreminder', null, [], $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -52,7 +52,7 @@ class Invoices extends Documents
      */
     public function sendPaymentReminder($id, $data = [], $params = [])
     {
-        $this->client->post($this->getUrl() . '/' . $id . '/paymentreminder', null, $data, $params);
+        $this->client->post($this->getUrl().'/'.$id.'/paymentreminder', null, $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -63,7 +63,7 @@ class Invoices extends Documents
      */
     public function getPaymentReminderEmailContent($id)
     {
-        return $this->client->get($this->getUrl() . '/' . $id . '/paymentreminder');
+        return $this->client->get($this->getUrl().'/'.$id.'/paymentreminder');
     }
 
 
@@ -108,22 +108,47 @@ class Invoices extends Documents
     /**
      * Apply a credit note to an invoice.
      *
+     * @param  string  $invid  Invoice ID
+     * @param  string  $creditid  Credit Note ID
+     * @param  float  $amount  Amount of credit note to apply.
+     *
+     * @return bool
+     * @see Invoices::applyCreditNotes()
+     *
+     */
+    public function applyCreditNote($invid, $creditid, $amount)
+    {
+        return $this->applyCreditNotes($invid, [$creditid => $amount]);
+    }
+
+    /**
+     * Apply multiple credit notes to an invoice.
+     *
      * Note that is is NOT DOCUMENTED in their API, and the way they say
      * to do it does not work. I had to reverse engineer this by looking at
      * what the React web client uses in the developer console.
      *
-     * @param string $invid Invoice ID
-     * @param string $creditid Credit Note ID
-     * @param float $amount Amount of credit note to apply.
+     * @param  string  $invid  Invoice ID
+     * @param  array  $creditNotesAmounts  Associative array of [$creditNoteId => $amountToApply]
+     *
+     * @return bool
      */
-    public function applyCreditNote($invid, $creditid, $amount)
+    public function applyCreditNotes($invid, array $creditNotesAmounts)
     {
-        $data = ['apply_creditnotes' => [
-            ["creditnote_id" => $creditid, "amount_applied" => $amount]
-        ]];
+        $creditData = [];
 
-        $this->client->post($this->getUrl() . '/' . $invid . '/credits', null, $data);
-        // If we arrive here without exceptions, everything went well
+        foreach ($creditNotesAmounts as $creditId => $amount) {
+            $creditData[] = [
+                "creditnote_id" => $creditId,
+                "amount_applied" => $amount
+            ];
+        }
+
+        $data = [
+            'apply_creditnotes' => $creditData
+        ];
+
+        $this->client->post($this->getUrl().'/'.$invid.'/credits', null, $data);
         return true;
     }
 }
