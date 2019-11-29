@@ -25,21 +25,46 @@ class CreditNotes extends Documents
             $idOrCreditNoteInvoice = $idOrCreditNoteInvoice->getId();
         }
 
-        $this->client->delete($this->getUrl() . '/' . $id . '/invoices/' . $idOrCreditNoteInvoice);
+        $this->client->delete($this->getUrl().'/'.$id.'/invoices/'.$idOrCreditNoteInvoice);
         // If we arrive here without exceptions, everything went well
         return true;
     }
 
     /**
      * @param $id
-     * @param array $data
+     * @param  array  $data  Associative array of [$invoiceId => $amount]
      * @return bool
      */
-    public function applyToInvoices($id, $data)
+    public function applyToInvoices($id, array $data)
     {
-        $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', $data);
+        // This does not work, and the documentation is wrong
+        // $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', null, $data);
+        // return $data['apply_to_invoices']['invoices'];
 
-        return $data['apply_to_invoices']['invoices'];
+        $result = true;
+        foreach ($data as $invoiceId => $amount) {
+            $result = $result && $this->applyToInvoice($id, $invoiceId, $amount);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Apply a credit note to an invoice
+     * @param $id
+     * @param $invoiceId
+     * @param $amount
+     * @return bool
+     */
+    public function applyToInvoice($id, $invoiceId, $amount)
+    {
+        // This does not work, and the documentation is wrong
+        // $data = $this->client->post($this->getUrl() . '/' . $id . '/invoices', null, $data);
+        // return $data['apply_to_invoices']['invoices'];
+
+        // let's use Invoices instead
+        $invoices = new Invoices($this->getClient());
+        return $invoices->applyCreditNote($id, $invoiceId, $amount);
     }
 
     /**
@@ -75,6 +100,6 @@ class CreditNotes extends Documents
      */
     public function emailHistory($id)
     {
-        return $this->client->get($this->getUrl() . '/' . $id . '/emailhistory');
+        return $this->client->get($this->getUrl().'/'.$id.'/emailhistory');
     }
 }

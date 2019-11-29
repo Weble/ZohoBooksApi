@@ -44,7 +44,7 @@ abstract class Documents extends Module
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        $this->client->post($this->getUrl() . '/email', $data, $params);
+        $this->client->post($this->getUrl() . '/email', null, $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
