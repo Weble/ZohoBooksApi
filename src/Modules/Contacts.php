@@ -77,7 +77,7 @@ class Contacts extends Module
             $params['end_date'] = $to->format('Y-m-d');
         }
 
-        $this->client->post($this->getUrl() . '/' . $id . '/statements/email', $data, $params);
+        $this->client->post($this->getUrl() . '/' . $id . '/statements/email', null, $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
