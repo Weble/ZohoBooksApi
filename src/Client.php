@@ -43,6 +43,32 @@ class Client
     protected $region = OAuthClient::DC_US;
 
     /**
+     * As of Zoho BUILD_VERSION "Dec_10_2019_23492", they are returning headers
+     * of 'X-Rate-Limit-Limit', 'X-Rate-Limit-Reset', and 'X-Rate-Limit-Remaining'
+     * on API calls. These vars are updated with the contents of those headers, if
+     * they exist.
+     */
+
+    /**
+     * The rate limit of this org, as returned by the X-Rate-Limit-Limit header
+     * @var int
+     */
+    protected $orgratelimit = 0;
+
+    /**
+     * The number of seconds remaining until the rate limit resets, as returned
+     * by the 'X-Rate-Limit-Reset' header
+     * @var int
+     */
+    protected $ratelimitreset = 0;
+
+    /**
+     * The number of API calls remaining before the rate limit is reset, as returned
+     * by the 'X-Rate-Limit-Remaining' header
+     */
+    protected $ratelimitremaining = 0;
+
+    /**
      * Client constructor.
      * @param $clientId
      * @param $clientSecret
@@ -295,6 +321,11 @@ class Client
      */
     protected function processResult(ResponseInterface $response)
     {
+        // Update the API Limit variables if they have been returned.
+        $this->orgratelimit = (int) $response->getHeaderLine('X-Rate-Limit-Limit', 0);
+        $this->ratelimitremaining = (int) $response->getHeaderline('X-Rate-Limit-Remaining', 0);
+        $this->ratelimitreset = (int) $response->getHeaderLine('X-Rate-Limit-Reset', 0);
+
         try {
             $result = json_decode($response->getBody(), true);
         } catch (\InvalidArgumentException $e) {
@@ -325,5 +356,23 @@ class Client
         }
 
         throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $result['message']);
+    }
+
+    /**
+     * Return the rate limits for this org.
+     *
+     * These values are taken from the headers provided by Zoho 
+     * as of BUILD_VERSION "Dec_10_2019_23492". If these values
+     * are not provided, or are invalid, they will be (int) 0
+     *
+     * @return array
+     */
+    public function getRateLimits()
+    {
+        return [
+            "orgratelimit" => $this->orgratelimit,
+            "ratelimitremaining" => $this->ratelimitremaining,
+            "reatelimitreset" => $this->ratelimitreset
+        ];
     }
 }
