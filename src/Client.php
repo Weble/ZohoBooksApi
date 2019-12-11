@@ -51,22 +51,23 @@ class Client
 
     /**
      * The rate limit of this org, as returned by the X-Rate-Limit-Limit header
-     * @var int
+     * @var int|null
      */
-    protected $orgratelimit = 0;
+    protected $orgRateLimit;
 
     /**
      * The number of seconds remaining until the rate limit resets, as returned
      * by the 'X-Rate-Limit-Reset' header
-     * @var int
+     * @var int|null
      */
-    protected $ratelimitreset = 0;
+    protected $rateLimitReset;
 
     /**
      * The number of API calls remaining before the rate limit is reset, as returned
      * by the 'X-Rate-Limit-Remaining' header
+     * @var int|null
      */
-    protected $ratelimitremaining = 0;
+    protected $rateLimitRemaining;
 
     /**
      * Client constructor.
@@ -322,9 +323,9 @@ class Client
     protected function processResult(ResponseInterface $response)
     {
         // Update the API Limit variables if they have been returned.
-        $this->orgratelimit = (int) $response->getHeaderLine('X-Rate-Limit-Limit', 0);
-        $this->ratelimitremaining = (int) $response->getHeaderline('X-Rate-Limit-Remaining', 0);
-        $this->ratelimitreset = (int) $response->getHeaderLine('X-Rate-Limit-Reset', 0);
+        $this->orgRateLimit = (int) $response->getHeaderLine('X-Rate-Limit-Limit', 0);
+        $this->rateLimitRemaining = (int) $response->getHeaderline('X-Rate-Limit-Remaining', 0);
+        $this->rateLimitReset = (int) $response->getHeaderLine('X-Rate-Limit-Reset', 0);
 
         try {
             $result = json_decode($response->getBody(), true);
@@ -364,15 +365,29 @@ class Client
      * These values are taken from the headers provided by Zoho 
      * as of BUILD_VERSION "Dec_10_2019_23492". If these values
      * are not provided, or are invalid, they will be (int) 0
-     *
-     * @return array
      */
-    public function getRateLimits()
+
+    /**
+     * @return int|null
+     */
+    public function getOrgRateLimit()
     {
-        return [
-            "orgratelimit" => $this->orgratelimit,
-            "ratelimitremaining" => $this->ratelimitremaining,
-            "reatelimitreset" => $this->ratelimitreset
-        ];
+        return $this->orgRateLimit;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRateLimitReset()
+    {
+        return $this->rateLimitReset;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRateLimitRemaining()
+    {
+        return $this->rateLimitRemaining;
     }
 }
