@@ -364,7 +364,7 @@ class Client
      *
      * These values are taken from the headers provided by Zoho 
      * as of BUILD_VERSION "Dec_10_2019_23492". If these values
-     * are not provided, or are invalid, they will be (int) 0
+     * are not provided, or are invalid, they will be null
      */
 
     /**
