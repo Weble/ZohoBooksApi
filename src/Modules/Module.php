@@ -62,7 +62,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
             return $item;
         }
 
-        $data = $item[Inflector::singularize($this->getResourceKey())];
+        $data = $item[Inflector::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
@@ -165,6 +165,21 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function getResourceKey()
     {
         return strtolower($this->getName());
+    }
+
+    /**
+     * This is used to determine the key of the returned data in get() calls
+     *
+     * Note that some modules (eg, Settings\TaxExemptions) override
+     * this value, because zoho does not return the data with the
+     * expected key. If you are looking at this code, you may also
+     * need to override the api key name, too.
+     *
+     * @return string
+     */
+    public function getResourceItemKey()
+    {
+        return $this->getResourceKey();
     }
 
     /**

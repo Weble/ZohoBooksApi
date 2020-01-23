@@ -38,6 +38,14 @@ class CustomerPayments extends Module
      */
     public function getResourceKey()
     {
+        return 'customerpayments';
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceItemKey()
+    {
         return 'payment';
     }
 

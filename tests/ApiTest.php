@@ -3,7 +3,9 @@
 namespace Webleit\ZohoBooksApi\Test;
 
 use PHPUnit\Framework\TestCase;
+use Tightenco\Collect\Support\Collection;
 use Weble\ZohoClient\OAuthClient;
+use Webleit\ZohoBooksApi\Models\CustomerPayment;
 use Webleit\ZohoBooksApi\ZohoBooks;
 use Webleit\ZohoCrmApi\Client;
 use Webleit\ZohoCrmApi\Exception\NonExistingModule;
@@ -85,7 +87,16 @@ class ApiTest extends TestCase
      */
     public function canGetListOfCustomerPayments()
     {
+        /** @var Collection $list */
         $list = self::$zoho->customerpayments->getList();
         $this->assertTrue(count($list) > 0);
+
+        /** @var CustomerPayment $item */
+        $item = $list->first();
+
+        $itemRetrieved = self::$zoho->customerpayments->get($item->getId());
+
+        $this->assertEquals(CustomerPayment::class, get_class($itemRetrieved));
+        $this->assertEquals($item->getId(), $itemRetrieved->getId());
     }
 }
