@@ -5,6 +5,7 @@ namespace Webleit\ZohoBooksApi\Test;
 use PHPUnit\Framework\TestCase;
 use Tightenco\Collect\Support\Collection;
 use Weble\ZohoClient\OAuthClient;
+use Webleit\ZohoBooksApi\Models\Contact;
 use Webleit\ZohoBooksApi\Models\CustomerPayment;
 use Webleit\ZohoBooksApi\ZohoBooks;
 use Webleit\ZohoCrmApi\Client;
@@ -98,5 +99,22 @@ class ApiTest extends TestCase
 
         $this->assertEquals(CustomerPayment::class, get_class($itemRetrieved));
         $this->assertEquals($item->getId(), $itemRetrieved->getId());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateCustomerPayment()
+    {
+        /** @var Contact $customer */
+        $customer = self::$zoho->contacts->getList()->first();
+        /** @var Collection $list */
+        $data = self::$zoho->customerpayments->create([
+            'customer_id' => $customer->getId(),
+            'payment_mode' => 'check',
+            'amount' => 100,
+            'date' => (new \DateTime())->format('Y-m-d')
+        ]);
+        $this->assertEquals(CustomerPayment::class, get_class($data));
     }
 }
