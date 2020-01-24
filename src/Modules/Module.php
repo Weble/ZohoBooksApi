@@ -86,7 +86,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function create($data, $params = [])
     {
         $data = $this->client->post($this->getUrl(), null, $data, $params);
-        $data = $data[Inflector::singularize($this->getResourceKey())];
+        $data = $data[Inflector::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
@@ -101,7 +101,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function update($id, $data, $params = [])
     {
         $data = $this->client->put($this->getUrl(), $id, null, $data, $params);
-        $data = $data[Inflector::singularize($this->getResourceKey())];
+        $data = $data[Inflector::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
