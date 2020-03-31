@@ -1,6 +1,6 @@
 <?php
 
-namespace Webleit\ZohoBooksApi\Models\Invoice;
+namespace Webleit\ZohoBooksApi\Models\RecurringExpense;
 
 use Webleit\ZohoBooksApi\Models\Model;
 
