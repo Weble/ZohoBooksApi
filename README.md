@@ -19,14 +19,21 @@ In order for the library to work, you need to provide an auth token for the zoho
 
 ```php
 require './vendor/autoload.php';
-$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('authtoken');
+$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('[CLIENT_ID]', '[CLIENT_SECRET]', '[OPTIONAL_REFRESH_TOKEN]');
 ```
 
-If you have more than one organization in the account, you can specify the organization id as the second parameter:
+If you have more than one organization in the account, you can specify the organization id by calling the dedicated method:
 
 ```php
-$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('authtoken', 'organization_id');
+$zohoBooks->setOrganizationId('[YOUR_ORG_ID]');
 ```
+
+You can also specify the Datacenter:
+
+```php
+$zohoBooks->getClient()->setRegion('eu');
+```
+
 
 ## API calls
 
