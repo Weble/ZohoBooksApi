@@ -2,3 +2,5 @@
 vendor
 docs
 test.php
+.DS_Store
+tests/config.json
