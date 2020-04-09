@@ -34,21 +34,9 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\Items $items
  * @property-read Modules\Users $users
  */
-class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
+class ZohoBooks implements Contracts\ProvidesModules
 {
     use ProvidesModules;
-
-    /**
-     * Zoho Books Api Auth Token
-     * @var string
-     */
-    protected $authToken = '';
-
-    /**
-     * Zoho Books Organization Id
-     * @var string
-     */
-    protected $organizationId = '';
 
     /**
      * Guzzle client to deal with the request
@@ -57,80 +45,48 @@ class ZohoBooks implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
     protected $client;
 
     /**
-     * Stored locally the total number per resource type
-     * @var array
-     */
-    protected $totals = [];
-
-    /**
-     * @var string
-     */
-    protected $modulesNamespace = '\\Webleit\\ZohoBooksApi\\Modules\\';
-
-    /**
      * List of available Zoho Books Api endpoints (see https://www.zoho.com/books/api/v3)
      * @var array
      */
     protected $availableModules = [
-        'contacts' => Modules\Contacts::class,
-        'estimates' => Modules\Estimates::class,
-        'salesorders' => Modules\SalesOrders::class,
-        'invoices' => Modules\Invoices::class,
-        'recurringinvoices' => Modules\RecurringInvoices::class,
-        'creditnotes' => Modules\CreditNotes::class,
-        'customerpayments' => Modules\CustomerPayments::class,
-        'expenses' => Modules\Expenses::class,
-        'recurringexpenses' => Modules\RecurringExpenses::class,
-        'purchaseorders' => Modules\PurchaseOrders::class,
-        'bills' => Modules\Bills::class,
-        'vendorcredits' => Modules\VendorCredits::class,
-        'vendorpayments' => Modules\VendorPayments::class,
-        'bankaccounts' => Modules\BankAccounts::class,
-        'banktransactions' => Modules\BankTransactions::class,
-        'bankrules' => Modules\BankRules::class,
-        'chartofaccounts' => Modules\ChartOfAccounts::class,
-        'journals' => Modules\Journals::class,
+        'contacts'               => Modules\Contacts::class,
+        'estimates'              => Modules\Estimates::class,
+        'salesorders'            => Modules\SalesOrders::class,
+        'invoices'               => Modules\Invoices::class,
+        'recurringinvoices'      => Modules\RecurringInvoices::class,
+        'creditnotes'            => Modules\CreditNotes::class,
+        'customerpayments'       => Modules\CustomerPayments::class,
+        'expenses'               => Modules\Expenses::class,
+        'recurringexpenses'      => Modules\RecurringExpenses::class,
+        'purchaseorders'         => Modules\PurchaseOrders::class,
+        'bills'                  => Modules\Bills::class,
+        'vendorcredits'          => Modules\VendorCredits::class,
+        'vendorpayments'         => Modules\VendorPayments::class,
+        'bankaccounts'           => Modules\BankAccounts::class,
+        'banktransactions'       => Modules\BankTransactions::class,
+        'bankrules'              => Modules\BankRules::class,
+        'chartofaccounts'        => Modules\ChartOfAccounts::class,
+        'journals'               => Modules\Journals::class,
         'basecurrencyadjustment' => Modules\BaseCurrencyAdjustment::class,
-        'projects' => Modules\Projects::class,
-        'settings' => Modules\Settings::class,
-        'organizations' => Modules\Organizations::class,
-        'items' => Modules\Items::class,
-        'users' => Modules\Users::class,
+        'projects'               => Modules\Projects::class,
+        'settings'               => Modules\Settings::class,
+        'organizations'          => Modules\Organizations::class,
+        'items'                  => Modules\Items::class,
+        'users'                  => Modules\Users::class,
     ];
 
-    /**
-     * ZohoBooksApi constructor.
-     * @param string $authToken         Zoho Books Api Token (See https://www.zoho.com/books/api/v3/)
-     * @param string $organizationId    The organization id you want to deal with (See https://www.zoho.com/books/api/v3/)
-     * @param string $region            The API Region. Can be US or EU
-     */
-    public function __construct($clientId, $clientSecret, $refreshToken = '')
+    public function __construct(Client $client)
     {
-        $this->client = new Client($clientId, $clientSecret, $refreshToken);
+        $this->client = $client;
     }
 
-    /**
-     * Proxy any module call to the right api call
-     * @param $name
-     * @return Modules\Module
-     */
-    public function __get($name)
+    public function __get(string $name): Modules\Module
     {
         return $this->createModule($name);
     }
 
-    /**
-     * Get Client Class constructor.
-     * @return \Client|object class
-     */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
-    }
-
-    public function setOrganizationId($id)
-    {
-        $this->client->setOrganizationId($id);
-        return $this;
     }
 }

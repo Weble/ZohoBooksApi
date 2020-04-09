@@ -2,11 +2,14 @@
 
 namespace Webleit\ZohoBooksApi;
 
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Weble\ZohoClient\Enums\Region;
 use Weble\ZohoClient\OAuthClient;
-use Webleit\ZohoBooksApi\Exceptions\AuthException;
 use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
+use Webleit\ZohoCrmApi\Exception\NonExistingModule;
 
 /**
  * Class Client
@@ -15,11 +18,8 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
  */
 class Client
 {
-
-    const ENDPOINT_CN = 'https://books.zoho.com.cn/api/v3/';
-    const ENDPOINT_EU = 'https://books.zoho.eu/api/v3/';
-    const ENDPOINT_IN = 'https://books.zoho.in/api/v3/';
-    const ENDPOINT_US = 'https://books.zoho.com/api/v3/';
+    const ZOHOBOOKS_API_URL_PATH = "/api/v3/";
+    const ZOHOBOOKS_API_URL_PARTIAL_HOST = 'https://books.zoho';
 
     /**
      * @var string
@@ -36,11 +36,6 @@ class Client
      * @var string
      */
     protected $organizationId;
-
-    /**
-     * @var string
-     */
-    protected $region = OAuthClient::DC_US;
 
     /**
      * As of Zoho BUILD_VERSION "Dec_10_2019_23492", they are returning headers
@@ -69,263 +64,161 @@ class Client
      */
     protected $rateLimitRemaining;
 
-    /**
-     * Client constructor.
-     * @param $clientId
-     * @param $clientSecret
-     * @param $refreshToken
-     */
-    public function __construct($clientId, $clientSecret, $refreshToken = null)
+    public function __construct(OAuthClient $oAuthClient, ClientInterface $client = null)
     {
-        $this->createClient();
+        if (!$client) {
+            $client = new \GuzzleHttp\Client();
+        }
 
-        $this->oAuthClient = new OAuthClient($clientId, $clientSecret, $refreshToken);
-        $this->oAuthClient->setRefreshToken($refreshToken);
+        $this->httpClient = $client;
+        $this->oAuthClient = $oAuthClient;
     }
 
-    /**
-     * @param string $region
-     * @return $this
-     */
-    public function setRegion($region = OAuthClient::DC_US)
+    public function __call($name, $arguments)
     {
-        $this->region = $region;
-        $this->createClient();
-
-        return $this;
-    }
-
-    /**
-     * @return \GuzzleHttp\Client|string
-     */
-    protected function createClient()
-    {
-        $this->httpClient = new \GuzzleHttp\Client(['base_uri' => $this->getEndPoint(), 'http_errors' => false]);
-        return $this->httpClient;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEndPoint()
-    {
-        switch ($this->region) {
-            case OAuthClient::DC_CN:
-                return self::ENDPOINT_CN;
-                break;
-            case OAuthClient::DC_IN:
-                return self::ENDPOINT_IN;
-                break;
-            case OAuthClient::DC_EU:
-                return self::ENDPOINT_EU;
-                break;
-            case OAuthClient::DC_US:
-            default:
-                return self::ENDPOINT_US;
-                break;
+        if (method_exists($this->oAuthClient, $name)) {
+            return call_user_func_array([
+                $this->oAuthClient,
+                $name
+            ], $arguments);
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getOrganizationId()
+    public function setRegion(Region $region): self
+    {
+        $this->oAuthClient->setRegion($region);
+        return $this;
+    }
+
+    public function getRegion(): Region
+    {
+        return $this->oAuthClient->getRegion();
+    }
+
+    public function getUrl(): string
+    {
+        $apiUrl = self::ZOHOBOOKS_API_URL_PARTIAL_HOST;
+        $domain = $this->getRegion()->getValue();
+        $path = self::ZOHOBOOKS_API_URL_PATH;
+
+        return $apiUrl . $domain . $path;
+    }
+
+    public function getOrganizationId(): ?string
     {
         return $this->organizationId;
     }
 
-    /**
-     * @return string
-     */
-    public function getRegion()
-    {
-        return $this->region;
-    }
-
-    /**
-     * @param $organizationId
-     * @return $this
-     */
-    public function setOrganizationId($organizationId)
+    public function setOrganizationId(string $organizationId): self
     {
         $this->organizationId = $organizationId;
         return $this;
     }
 
-    /**
-     * @param string $url
-     * @param string $organizationId
-     * @param array $filters
-     *
-     * @return array
-     */
-    public function getList($url, $organizationId = null, array $filters = [])
+    public function getList(string $url, array $filters = []): array
     {
-        return $this->processResult(
-            $this->httpClient->get($url, $this->getOptions(['query' => array_merge($this->getParams($organizationId), $filters)]))
-        );
+        return $this->call($url, 'GET', [], $filters);
     }
 
-    /**
-     * @param string $url
-     * @param string $id
-     * @param string $organizationId
-     * @param array $params Additional query params
-     *
-     * @return array
-     */
-    public function get($url, $id = null, $organizationId = null, array $params = [])
+    public function get(string $url, ?string $id = null, array $params = []): array
     {
         if ($id !== null) {
             $url .= '/' . $id;
         }
 
-        return $this->processResult(
-            $this->httpClient->get($url, $this->getOptions(['query' => $this->getParams($organizationId) + $params]))
+        return $this->call(
+            $url,
+            'GET',
+            [],
+            $params
         );
     }
 
     /**
-     * @param string $url
-     * @param string $organizationId
-     * @param array $params Additional query params
-     *
-     * @throws ErrorResponseException;
-     *
-     * @return StreamInterface
+     * @throws ErrorResponseException
      */
-    public function rawGet($url, $organizationId = null, array $params = [])
+    public function rawGet(string $url, ?array $params = []): StreamInterface
     {
         try {
-            $response = $this->httpClient->get($url, $this->getOptions(['query' => $this->getParams($organizationId) + $params]));
+            $response = $this->httpClient->get($url, $this->getHttpClientOptions([], $params));
             return $response->getBody();
         } catch (\InvalidArgumentException $e) {
             throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $e);
         }
     }
 
-    /**
-     * @param string $url
-     * @param string $organizationId
-     * @param array $data
-     * @param array $params Additional query params
-     *
-     * @return array
-     */
-    public function post($url, $organizationId = null, array $data = [], array $params = [])
+    public function post(string $url, array $data = [], array $params = [])
     {
-        return $this->processResult($this->httpClient->post(
+        return $this->call(
             $url,
-            $this->getOptions([
-                'query' => $this->getParams($organizationId) + $params,
-                'form_params' => ['JSONString' => json_encode($data)]
-            ])
-        ));
-    }
-
-    /**
-     * @param string $url
-     * @param string $id
-     * @param string $organizationId
-     * @param array $data
-     * @param array $params Additional query params
-     *
-     * @return array
-     */
-    public function put($url, $id = null, $organizationId = null, array $data = [], array $params = [])
-    {
-        if ($id !== null) {
-            $url .= '/' . $id;
-        }
-
-        return $this->processResult($this->httpClient->put(
-            $url,
-            $this->getOptions([
-                'query' => $this->getParams($organizationId) + $params,
-                'form_params' => ['JSONString' => json_encode($data)]
-            ])
-        ));
-    }
-
-    /**
-     * @param string $url
-     * @param string $id
-     * @param string $organizationId
-     *
-     * @return array
-     */
-    public function delete($url, $id = null, $organizationId = null)
-    {
-        if ($id !== null) {
-            $url .= '/' . $id;
-        }
-
-        return $this->processResult(
-            $this->httpClient->delete($url, $this->getOptions(['query' => $this->getParams($organizationId)]))
+            'POST',
+            $data,
+            $params
         );
     }
 
-    /**
-     * @param string $organizationId
-     * @param array $data
-     *
-     * @return array
-     */
-    protected function getParams($organizationId = null, array $data = [])
+    public function put(string $url, ?string $id = null, array $data = [], array $params = [])
     {
-        if (!$organizationId) {
-            $organizationId = $this->organizationId;
+        if ($id !== null) {
+            $url .= '/' . $id;
         }
 
-        $params = [];
-
-        if ($organizationId) {
-            $params['organization_id'] = $organizationId;
-        }
-
-        if ($data) {
-            $params['JSONString'] = json_encode($data);
-        }
-
-        return $params;
+        return $this->call($url, 'PUT', $data, $params);
     }
 
-    /**
-     * @param array $params
-     * @return array
-     */
-    protected function getOptions($params = [])
+    public function delete(string $url, ?string $id = null)
     {
+        if ($id !== null) {
+            $url .= '/' . $id;
+        }
+
+        return $this->call($url, 'DELETE');
+    }
+
+    public function call(string $uri, string $method, array $data = [], array $rawData = [])
+    {
+        $method = strtolower($method);
+        try {
+            $options = $this->getHttpClientOptions($data, $rawData);
+
+            return $this->processResult(
+                $this->httpClient->$method($this->getUrl() . $uri, $options)
+            );
+        } catch (ClientException $e) {
+
+            // Retry?
+            if ($e->getCode() === 401) {
+                $this->oAuthClient->generateTokens()->getAccessToken();
+                return $this->call($uri, $method, $data, $rawData);
+            }
+
+            throw $e;
+        }
+    }
+
+    protected function getHttpClientOptions(array $data = [], array $rawData = []): array
+    {
+        $json = ['JSONString' => json_encode($data)];
+
         return array_merge([
-            'headers' => [
-                'Authorization' => 'Zoho-oauthtoken ' . $this->oAuthClient->getAccessToken()
-            ]
-        ], $params);
+            'query'       => [
+                'organization_id' => $this->getOrganizationId()
+            ],
+            'form_params' => $json,
+            'headers'     => ['Authorization' => 'Zoho-oauthtoken ' . $this->oAuthClient->getAccessToken()]
+        ], $rawData);
     }
 
     /**
-     * @param $name
-     * @param $arguments
-     * @return mixed
-     */
-    public function __call($name, $arguments)
-    {
-        return call_user_func_array([$this->oAuthClient, $name], $arguments);
-    }
-
-    /**
-     * @param ResponseInterface $response
-     *
-     * @throws ErrorResponseException
-     *
      * @return array|string
+     * @throws ErrorResponseException
      */
     protected function processResult(ResponseInterface $response)
     {
         // Update the API Limit variables if they have been returned.
-        $this->orgRateLimit = (int) $response->getHeaderLine('X-Rate-Limit-Limit', 0);
-        $this->rateLimitRemaining = (int) $response->getHeaderline('X-Rate-Limit-Remaining', 0);
-        $this->rateLimitReset = (int) $response->getHeaderLine('X-Rate-Limit-Reset', 0);
+        $this->orgRateLimit = (int)$response->getHeaderLine('X-Rate-Limit-Limit');
+        $this->rateLimitRemaining = (int)$response->getHeaderline('X-Rate-Limit-Remaining');
+        $this->rateLimitReset = (int)$response->getHeaderLine('X-Rate-Limit-Reset');
 
         try {
             $result = json_decode($response->getBody(), true);
@@ -333,36 +226,32 @@ class Client
 
             // All ok, probably not json, like PDF?
             if ($response->getStatusCode() >= 200 && $response->getStatusCode() <= 299) {
-                return (string) $response->getBody();
+                return (string)$response->getBody();
             }
 
-            $result = [
-                'message' => 'Internal API error: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase(),
-            ];
+            throw new ErrorResponseException($response->getReasonPhrase(), $response->getStatusCode());
         }
 
         if (!$result) {
             // All ok, probably not json, like PDF?
             if ($response->getStatusCode() >= 200 && $response->getStatusCode() <= 299) {
-                return (string) $response->getBody();
+                return (string)$response->getBody();
             }
 
-            $result = [
-                'message' => 'Internal API error: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase(),
-            ];
+            throw new ErrorResponseException($response->getReasonPhrase(), $response->getStatusCode());
         }
 
         if (isset($result['code']) && 0 == $result['code']) {
             return $result;
         }
 
-        throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $result['message']);
+        throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $result['message'], $result['code'] ?? $response->getStatusCode());
     }
 
     /**
      * Return the rate limits for this org.
      *
-     * These values are taken from the headers provided by Zoho 
+     * These values are taken from the headers provided by Zoho
      * as of BUILD_VERSION "Dec_10_2019_23492". If these values
      * are not provided, or are invalid, they will be null
      */
@@ -389,5 +278,10 @@ class Client
     public function getRateLimitRemaining()
     {
         return $this->rateLimitRemaining;
+    }
+
+    public function getHttpClient(): ClientInterface
+    {
+        return $this->httpClient;
     }
 }

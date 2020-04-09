@@ -2,20 +2,17 @@
 
 namespace Webleit\ZohoBooksApi\Test;
 
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Tightenco\Collect\Support\Collection;
+use Weble\ZohoClient\Enums\Region;
 use Weble\ZohoClient\OAuthClient;
+use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Contact;
 use Webleit\ZohoBooksApi\Models\CustomerPayment;
 use Webleit\ZohoBooksApi\ZohoBooks;
-use Webleit\ZohoCrmApi\Client;
-use Webleit\ZohoCrmApi\Exception\NonExistingModule;
-use Webleit\ZohoCrmApi\Models\Request;
-use Webleit\ZohoCrmApi\Models\Settings\Layout;
-use Webleit\ZohoCrmApi\Models\Template;
-use Webleit\ZohoCrmApi\Models\User;
-use Webleit\ZohoCrmApi\Modules\Records;
-use Webleit\ZohoCrmApi\ZohoCrm;
 
 /**
  * Class ClassNameGeneratorTest
@@ -24,7 +21,7 @@ use Webleit\ZohoCrmApi\ZohoCrm;
 class ApiTest extends TestCase
 {
     /**
-     * @var \Webleit\ZohoBooksApi\Client
+     * @var Client
      */
     protected static $client;
 
@@ -44,25 +41,44 @@ class ApiTest extends TestCase
             $authFile = __DIR__.'/config.json';
         }
 
-        $auth = json_decode(file_get_contents($authFile));
+        $auth = json_decode(file_get_contents($authFile))
+        ;
 
-        $client = new ZohoBooks($auth->client_id, $auth->client_secret);
-        $client->setOrganizationId( $auth->organization_id);
-        $client->getClient()->setRefreshToken($auth->refresh_token);
+        $oAuthClient = self::createOAuthClient();
+        $client = new Client($oAuthClient);
+        $client->setOrganizationId($auth->organization_id);
+
+        $client = new ZohoBooks($client);
 
         self::$zoho = $client;
-        self::$client = $client->getClient()->setRegion(OAuthClient::DC_US);
-        self::$client = $client->getClient()->setRegion(OAuthClient::DC_US);
+        self::$client = $client->getClient();
     }
 
-    /**
-     * @test
-     */
-    public function hasAccessToken()
+    protected static function createOAuthClient(): OAuthClient
     {
-        $accessToken = self::$client->getAccessToken();
-        $this->assertTrue(strlen($accessToken) > 0);
-        $this->assertFalse(self::$client->accessTokenExpired());
+        $authFile = __DIR__ . '/config.example.json';
+        if (file_exists(__DIR__ . '/config.json')) {
+            $authFile = __DIR__ . '/config.json';
+        }
+
+        $auth = json_decode(file_get_contents($authFile));
+
+        $region = Region::us();
+        if (isset($auth->region)) {
+            $region = Region::make($auth->region);
+        }
+
+        $filesystemAdapter = new Local(sys_get_temp_dir());
+        $filesystem        = new Filesystem($filesystemAdapter);
+        $pool = new FilesystemCachePool($filesystem);
+
+        $client = new OAuthClient($auth->client_id, $auth->client_secret);
+        $client->setRefreshToken($auth->refresh_token);
+        $client->setRegion($region);
+        $client->offlineMode();
+        $client->useCache($pool);
+
+        return $client;
     }
 
     /**
@@ -104,17 +120,17 @@ class ApiTest extends TestCase
     /**
      * @test
      */
-    public function canCreateCustomerPayment()
+    public function canCreateAndDeleteCustomer()
     {
+        $name = 'Test ' . uniqid();
         /** @var Contact $customer */
-        $customer = self::$zoho->contacts->getList()->first();
-        /** @var Collection $list */
-        $data = self::$zoho->customerpayments->create([
-            'customer_id' => $customer->getId(),
-            'payment_mode' => 'check',
-            'amount' => 100,
-            'date' => (new \DateTime())->format('Y-m-d')
+        $customer = self::$zoho->contacts->create([
+            'contact_name' => $name
         ]);
-        $this->assertEquals(CustomerPayment::class, get_class($data));
+
+        $this->assertEquals(Contact::class, get_class($customer));
+        $this->assertEquals($name, $customer->toArray()['contact_name']);
+
+        $this->assertTrue(self::$zoho->contacts->delete($customer->getId()));
     }
 }

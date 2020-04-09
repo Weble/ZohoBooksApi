@@ -3,7 +3,7 @@
 namespace Webleit\ZohoBooksApi\Modules;
 
 use Doctrine\Common\Inflector\Inflector;
-use Illuminate\Support\Collection;
+use Tightenco\Collect\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
 
@@ -38,7 +38,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function getList($params = [])
     {
-        $list = $this->client->getList($this->getUrl(), null, $params);
+        $list = $this->client->getList($this->getUrl(), $params);
 
         $collection = new Collection($list[$this->getResourceKey()]);
         $collection = $collection->mapWithKeys(function ($item) {
@@ -56,7 +56,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function get($id, array $params = [])
     {
-        $item = $this->client->get($this->getUrl(), $id, null, $params);
+        $item = $this->client->get($this->getUrl(), $id, $params);
 
         if (!is_array($item)) {
             return $item;
@@ -73,7 +73,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function getTotal()
     {
-        $list = $this->client->getList($this->getUrl(), null, ['response_option' => self::RESPONSE_OPTION_PAGINATION_ONLY]);
+        $list = $this->client->getList($this->getUrl(), ['response_option' => self::RESPONSE_OPTION_PAGINATION_ONLY]);
         return $list['page_context']['total'];
     }
 
@@ -85,7 +85,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function create($data, $params = [])
     {
-        $data = $this->client->post($this->getUrl(), null, $data, $params);
+        $data = $this->client->post($this->getUrl(), $data, $params);
         $data = $data[Inflector::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
@@ -100,7 +100,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function update($id, $data, $params = [])
     {
-        $data = $this->client->put($this->getUrl(), $id, null, $data, $params);
+        $data = $this->client->put($this->getUrl(), $id, $data, $params);
         $data = $data[Inflector::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
@@ -149,7 +149,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function getUrl()
     {
-        return $this->client->getEndPoint() . $this->getUrlPath();
+        return $this->getUrlPath();
     }
 
     /**
@@ -218,7 +218,6 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     {
         $this->client->post(
             $this->getUrl() . '/' . $id . '/' . $key . '/' . $status,
-            null,
             ["random" => "data"]
         );
         // If we arrive here without exceptions, everything went well

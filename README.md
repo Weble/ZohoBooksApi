@@ -15,23 +15,23 @@ composer require webleit/zohobooksapi
 ## Usage
 
 In order to use the library, just require the composer autoload file, and then fire up the library itself.
-In order for the library to work, you need to provide an auth token for the zoho book apis.
+In order for the library to work, you need to be authenticated with the zoho apis.
 
 ```php
 require './vendor/autoload.php';
-$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks('[CLIENT_ID]', '[CLIENT_SECRET]', '[OPTIONAL_REFRESH_TOKEN]');
-```
 
-If you have more than one organization in the account, you can specify the organization id by calling the dedicated method:
+// setup the generic zoho oath client
+$oAuthClient = new \Weble\ZohoClient\OAuthClient('[CLIENT_ID]', '[CLIENT_SECRET]');
+$oAuthClient->setRefreshToken('[REFRESH_TOKEN]');
+$oAuthClient->setRegion(\Weble\ZohoClient\Enums\Region::us());
+$oAuthClient->useCache($yourPSR6CachePool);
 
-```php
-$zohoBooks->setOrganizationId('[YOUR_ORG_ID]');
-```
+// setup the zoho books client
+$client = new \Webleit\ZohoBooksApi\Client($oAuthClient);
+$client->setOrganizationId('[YOUR_ORGANIZATION_ID]');
 
-You can also specify the Datacenter:
-
-```php
-$zohoBooks->getClient()->setRegion('eu');
+// Create the main class
+$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks($client);
 ```
 
 
