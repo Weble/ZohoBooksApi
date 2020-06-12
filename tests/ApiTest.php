@@ -133,4 +133,25 @@ class ApiTest extends TestCase
 
         $this->assertTrue(self::$zoho->contacts->delete($customer->getId()));
     }
+
+    /**
+     * @test
+     */
+    public function canCreateAndFilterCustomer()
+    {
+        $name = 'Test ' . uniqid();
+        /** @var Contact $customer */
+        $customer = self::$zoho->contacts->create([
+            'contact_name' => $name
+        ]);
+
+        $customers = self::$zoho->contacts->getList([
+            'contact_name' => $name
+        ]);
+
+        $this->assertEquals(1, $customers->count());
+
+        // delete it it afterwards
+        self::$zoho->contacts->delete($customer->getId());
+    }
 }
