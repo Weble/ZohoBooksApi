@@ -117,7 +117,7 @@ class Client
 
     public function getList(string $url, array $filters = []): array
     {
-        return $this->call($url, 'GET', [], $filters);
+        return $this->call($url, 'GET', [], ['query' => $filters]);
     }
 
     public function get(string $url, ?string $id = null, array $params = []): array
@@ -200,7 +200,7 @@ class Client
     {
         $json = ['JSONString' => json_encode($data)];
 
-        return array_merge([
+        return array_merge_recursive([
             'query'       => [
                 'organization_id' => $this->getOrganizationId()
             ],
