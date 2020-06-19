@@ -240,19 +240,6 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     }
     
     /**
-     * @param $crm_id
-     * @return Model
-     */
-    public function importFromCRM ($crm_id)
-    {
-        $data = $this->client->post(
-            $this->getUrl() . $crm_id . '/import', ['blank'=>'']
-        );
-        return $this->make($data);
-    }
-    
-    
-    /**
      * @param $property
      * @param null $id
      * @param null $class
