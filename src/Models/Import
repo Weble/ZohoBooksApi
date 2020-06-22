@@ -1,8 +1,0 @@
-<?php
-namespace Webleit\ZohoBooksApi\Models;
-
-
-class Import extends Model
-{
-
-}
