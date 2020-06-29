@@ -1,8 +1,7 @@
 <?php
 
-namespace Webleit\ZohoBooksApi\Test;
+namespace Webleit\ZohoBooksApi\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Webleit\ZohoBooksApi\Contracts\ProvidesModules;
 use Webleit\ZohoBooksApi\Models\CustomerPayment;
 use Webleit\ZohoBooksApi\Modules\Module;
@@ -19,10 +18,7 @@ class ClassNameGeneratorTest extends TestCase
      */
     public function generate_class_names()
     {
-        // Create a stub for the class.
-        $zohoBooks = new ZohoBooks('FAKE_AUTH_TOKEN', 'FAKE_ORG_ID');
-
-        $this->assert_that_provided_modules_exists($zohoBooks);
+        $this->assert_that_provided_modules_exists(self::$zoho);
     }
 
     /**
@@ -31,7 +27,7 @@ class ClassNameGeneratorTest extends TestCase
     public function customer_payments_exists()
     {
         // Create a stub for the class.
-        $zohoBooks = new ZohoBooks('FAKE_AUTH_TOKEN', 'FAKE_ORG_ID');
+        $zohoBooks = self::$zoho;
         $customerPayments = $zohoBooks->customerpayments;
         $customerPayment = $customerPayments->make([]);
 
