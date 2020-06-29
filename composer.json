@@ -11,10 +11,10 @@
     ],
     "require": {
         "php" : ">=7.2.0",
-        "guzzlehttp/guzzle": "~6.0",
-        "doctrine/inflector": "^1.3",
+        "guzzlehttp/guzzle": "~6.0",        
         "tightenco/collect": "^6.0",
-        "weble/zohoclient": "^3.0.1"
+        "weble/zohoclient": "^3.0.1",
+        "mmucklo/inflect": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0"

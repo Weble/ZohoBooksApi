@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Models;
 
-use Doctrine\Common\Inflector\Inflector;
+use Inflect\Inflect;
 use Illuminate\Contracts\Support\Arrayable;
 use Webleit\ZohoBooksApi\Contracts\Module;
 
@@ -141,6 +141,6 @@ abstract class Model implements \JsonSerializable, Arrayable
      */
     public function getName()
     {
-        return Inflector::singularize(strtolower((new \ReflectionClass($this))->getShortName()));
+        return Inflect::singularize(strtolower((new \ReflectionClass($this))->getShortName()));
     }
 }

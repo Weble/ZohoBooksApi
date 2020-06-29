@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Modules;
 
-use Doctrine\Common\Inflector\Inflector;
+use Inflect\Inflect;
 use Tightenco\Collect\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
@@ -62,7 +62,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
             return $item;
         }
 
-        $data = $item[Inflector::singularize($this->getResourceItemKey())];
+        $data = $item[Inflect::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
@@ -86,7 +86,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function create($data, $params = [])
     {
         $data = $this->client->post($this->getUrl(), $data, $params);
-        $data = $data[Inflector::singularize($this->getResourceItemKey())];
+        $data = $data[Inflect::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
@@ -101,7 +101,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function update($id, $data, $params = [])
     {
         $data = $this->client->put($this->getUrl(), $id, $data, $params);
-        $data = $data[Inflector::singularize($this->getResourceItemKey())];
+        $data = $data[Inflect::singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
@@ -140,7 +140,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function getName()
     {
-        return Inflector::pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
+        return Inflect::pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
     }
 
     /**
@@ -250,7 +250,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     protected function getPropertyList($property, $id = null, $class = null, $subProperty = null, $module = null)
     {
         if (!$class) {
-            $class = $this->getModelClassName() . '\\' . ucfirst(strtolower(Inflector::singularize($property)));
+            $class = $this->getModelClassName() . '\\' . ucfirst(strtolower(Inflect::singularize($property)));
         }
 
         if (!$module) {
@@ -285,7 +285,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function getModelClassName()
     {
         $className = (new \ReflectionClass($this))->getShortName();
-        $class = '\\Webleit\\ZohoBooksApi\\Models\\' . ucfirst(Inflector::singularize($className));
+        $class = '\\Webleit\\ZohoBooksApi\\Models\\' . ucfirst(Inflect::singularize($className));
 
         return $class;
     }

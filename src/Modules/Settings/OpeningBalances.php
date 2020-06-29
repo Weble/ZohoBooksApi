@@ -2,7 +2,6 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Settings;
 
-use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Models\Settings\OpeningBalance;
 use Webleit\ZohoBooksApi\Modules\Module;

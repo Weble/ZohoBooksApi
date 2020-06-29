@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Modules;
 
-use Doctrine\Common\Inflector\Inflector;
+use Inflect\Inflect;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 
@@ -77,7 +77,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      */
     public function getName()
     {
-        return Inflector::pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
+        return Inflect::pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
     }
 
     /**

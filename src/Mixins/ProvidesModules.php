@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Mixins;
 
-use Doctrine\Common\Inflector\Inflector;
+
 
 trait ProvidesModules
 {

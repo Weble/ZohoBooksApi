@@ -3,7 +3,7 @@
 namespace Webleit\ZohoBooksApi\Modules;
 
 use Webleit\ZohoBooksApi\Models\Model;
-use Doctrine\Common\Inflector\Inflector;
+use Inflect\Inflect;
 
 /**
  * Class Module
@@ -17,7 +17,7 @@ abstract class SubModule extends Module
     public function getModelClassName()
     {
         $className = (new \ReflectionClass($this))->getShortName();
-        return parent::getModelClassName() . '\\' . Inflector::singularize(Inflector::camelize($className));
+        return parent::getModelClassName() . '\\' . Inflect::singularize(ucwords($className));
     }
 
     /**
