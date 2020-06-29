@@ -17,7 +17,7 @@ abstract class SubModule extends Module
     public function getModelClassName()
     {
         $className = (new \ReflectionClass($this))->getShortName();
-        return parent::getModelClassName() . '\\' . Inflector::singularize(Inflector::camelize($className));
+        return parent::getModelClassName() . '\\' . $this->inflector->singularize($this->inflector->camelize($className));
     }
 
     /**

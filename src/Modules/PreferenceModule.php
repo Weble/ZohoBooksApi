@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Modules;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 
@@ -22,6 +22,10 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      * @var Client
      */
     protected $client;
+    /**
+     * @var \Doctrine\Inflector\Inflector
+     */
+    protected $inflector;
 
     /**
      * Api constructor.
@@ -29,6 +33,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
     function __construct(Client $client)
     {
         $this->client = $client;
+        $this->inflector = InflectorFactory::create()->build();
     }
 
     /**
@@ -77,7 +82,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      */
     public function getName()
     {
-        return Inflector::pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
+        return $this->inflector->pluralize(strtolower((new \ReflectionClass($this))->getShortName()));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Mixins;
 
-use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Models\Comment;
 
@@ -16,7 +15,7 @@ trait Commentable
         $url = $this->getUrl() . '/' . $id . '/comments';
         $list = $this->client->getList($url);
 
-        $prefix = Inflector::singularize(strtolower($this->getName())) . '_';
+        $prefix = $this->inflector->singularize(strtolower($this->getName())) . '_';
 
         $collection = new Collection($list[$prefix . 'comments']);
         $collection = $collection->mapWithKeys(function ($item) {
