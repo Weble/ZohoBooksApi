@@ -43,21 +43,16 @@ class Import extends Module
     /**
      * @param $crm_id
      * @param $urlPath
-     * @return Contact
      * @throws ErrorResponseException
      */
-    public function importFromCRM ($crm_id, $urlPath): Contact
+    public function importFromCRM ($crm_id, $urlPath)
     {
         $data = $this->client->post(
             'crm/' . $urlPath . '/'. $crm_id . '/import', ['blank'=>'']
         );
 
-        if (isset($data['code']) && 0 == $data['code']) {
-            return $data['data'] ?? [];
-        }
-
-        if (isset( $data['data']['contact_id'])) {
-            return (new Contacts($this->getClient()))->get($data['data']['contact_id']);
+        if (isset( $data['data']['customer_id'])) {
+            return (new Contacts($this->getClient()))->get($data['data']['customer_id']);
         }
 
         throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $data['message'], $data['code'] ?? 500);
