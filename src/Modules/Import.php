@@ -1,7 +1,9 @@
 <?php
+
 namespace Webleit\ZohoBooksApi\Modules;
 
 
+use GuzzleHttp\Exception\ClientException;
 use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
 use Webleit\ZohoBooksApi\Models\Contact;
 
@@ -45,13 +47,17 @@ class Import extends Module
      * @param $urlPath
      * @throws ErrorResponseException
      */
-    public function importFromCRM ($crm_id, $urlPath)
+    public function importFromCRM($crm_id, $urlPath)
     {
-        $data = $this->client->post(
-            'crm/' . $urlPath . '/'. $crm_id . '/import', ['blank'=>'']
-        );
+        try {
+            $data = $this->client->post(
+                'crm/' . $urlPath . '/' . $crm_id . '/import', ['blank' => '']
+            );
+        } catch (ClientException  $e) {
+            throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $e->getMessage(), $e->getCode() ?: 500);
+        }
 
-        if (isset( $data['data']['customer_id'])) {
+        if (isset($data['data']['customer_id'])) {
             return (new Contacts($this->getClient()))->get($data['data']['customer_id']);
         }
 
