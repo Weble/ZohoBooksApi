@@ -33,6 +33,7 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\Organizations $organizations
  * @property-read Modules\Items $items
  * @property-read Modules\Users $users
+ * @property-read Modules\Import $import
  */
 class ZohoBooks implements Contracts\ProvidesModules
 {
@@ -73,6 +74,7 @@ class ZohoBooks implements Contracts\ProvidesModules
         'organizations'          => Modules\Organizations::class,
         'items'                  => Modules\Items::class,
         'users'                  => Modules\Users::class,
+        'import'                 => Modules\Import::class,
     ];
 
     public function __construct(Client $client)
