@@ -22,7 +22,10 @@ class Client
     const ZOHOBOOKS_API_URL_PARTIAL_HOST = 'https://books.zoho';
 
     /**
-     * @var string
+     * Whilst this is technically a ClientInterface, we'll just mark it as a standard
+     * client, with all the methods in place.
+     * 
+     * @var \GuzzleHttp\Client
      */
     protected $httpClient;
 
