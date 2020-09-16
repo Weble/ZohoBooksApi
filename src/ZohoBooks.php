@@ -82,7 +82,7 @@ class ZohoBooks implements Contracts\ProvidesModules
         $this->client = $client;
     }
 
-    public function __get(string $name): Modules\Module
+    public function __get(string $name): Contracts\Module
     {
         return $this->createModule($name);
     }

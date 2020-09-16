@@ -25,4 +25,13 @@ trait ProvidesModules
     {
         return $this->availableModules;
     }
+
+    /**
+     * Get the list of available modules keys
+     * @return array
+     */
+    public function getAvailableModuleKeys()
+    {
+        return array_keys($this->getAvailableModules());
+    }
 }
