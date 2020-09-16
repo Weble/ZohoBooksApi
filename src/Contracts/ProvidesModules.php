@@ -18,4 +18,10 @@ interface ProvidesModules
      * @return array
      */
     public function getAvailableModules();
+
+    /**
+     * Get the list of available modules
+     * @return array
+     */
+    public function getAvailableModuleKeys();
 }

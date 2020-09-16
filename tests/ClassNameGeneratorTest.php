@@ -4,6 +4,7 @@ namespace Webleit\ZohoBooksApi\Tests;
 
 use Webleit\ZohoBooksApi\Contracts\ProvidesModules;
 use Webleit\ZohoBooksApi\Models\CustomerPayment;
+use Webleit\ZohoBooksApi\Modules\Import;
 use Webleit\ZohoBooksApi\Modules\Module;
 use Webleit\ZohoBooksApi\ZohoBooks;
 
@@ -39,11 +40,14 @@ class ClassNameGeneratorTest extends TestCase
      */
     protected function assert_that_provided_modules_exists(ProvidesModules $class)
     {
-        foreach ($class->getAvailableModules() as $module) {
+        foreach ($class->getAvailableModuleKeys() as $module) {
+
             /** @var Module $moduleClass */
             $moduleClass = $class->createModule($module);
 
-            if ($moduleClass instanceof Module) {
+            $this->assertTrue($moduleClass instanceof \Webleit\ZohoBooksApi\Contracts\Module, $module);
+
+            if ($moduleClass instanceof Module && $moduleClass !== Import::class) {
                 $this->assertTrue(class_exists($moduleClass->getModelClassName()), $moduleClass->getModelClassName());
             }
 

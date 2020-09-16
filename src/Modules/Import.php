@@ -4,11 +4,33 @@ namespace Webleit\ZohoBooksApi\Modules;
 
 
 use GuzzleHttp\Exception\ClientException;
+use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
 use Webleit\ZohoBooksApi\Models\Contact;
 
-class Import extends Module
+class Import implements \Webleit\ZohoBooksApi\Contracts\Module
 {
+    /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
+     * Api constructor.
+     */
+    function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
     /**
      * @param $crm_contact_id
      * @return Contact
@@ -63,6 +85,4 @@ class Import extends Module
 
         throw new ErrorResponseException('Response from Zoho is not success. Message: ' . $data['message'], $data['code'] ?? 500);
     }
-
-
 }

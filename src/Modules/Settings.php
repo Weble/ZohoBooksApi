@@ -23,7 +23,7 @@ use Webleit\ZohoBooksApi\Modules\Settings as SettingsModules;
  * @property-read SettingsModules\AutoReminders $autoreminders;
  * @property-read SettingsModules\ManualReminders $manualreminders;
  */
-class Settings implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
+class Settings implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules, \Webleit\ZohoBooksApi\Contracts\Module
 {
     use ProvidesModules;
 
@@ -72,5 +72,10 @@ class Settings implements \Webleit\ZohoBooksApi\Contracts\ProvidesModules
     public function __get($name)
     {
         return $this->createModule($name);
+    }
+
+    public function getClient(): Client
+    {
+        return $this->client;
     }
 }

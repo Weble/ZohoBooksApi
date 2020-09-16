@@ -107,7 +107,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     public function update($id, $data, $params = [])
     {
         $data = $this->client->put($this->getUrl(), $id, $data, $params);
-        $data = $data[$this->inflector->pluralize($this->getResourceItemKey())];
+        $data = $data[$this->inflector->singularize($this->getResourceItemKey())];
 
         return $this->make($data);
     }
