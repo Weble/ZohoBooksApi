@@ -18,7 +18,7 @@ class BankTransactions extends Module
      */
     public function getMatching($id, $params = [])
     {
-        $data = $this->client->getList($this->getUrl() . '/uncategorized/' . $id . '/match', null, $params);
+        $data = $this->client->getList($this->getUrl() . '/uncategorized/' . $id . '/match', [], $params);
 
         $collection = new Collection($data['matching_transactions']);
         $collection = $collection->mapWithKeys(function ($item) {
@@ -48,7 +48,7 @@ class BankTransactions extends Module
      */
     public function exclude($id, $params = [])
     {
-        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/exclude', null, [], $params);
+        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/exclude', [], $params);
         return true;
     }
 
@@ -59,7 +59,7 @@ class BankTransactions extends Module
      */
     public function restore($id, $params = [])
     {
-        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/restore', null, [], $params);
+        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/restore', [], $params);
         return true;
     }
 
@@ -72,7 +72,7 @@ class BankTransactions extends Module
      */
     public function categorizeAs($id, $category, $data = [], $params = [])
     {
-        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/categorize/' . $category, null, $data, $params);
+        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/categorize/' . $category, $data, $params);
         return true;
     }
 
@@ -83,7 +83,7 @@ class BankTransactions extends Module
      */
     public function uncategorize($id, $params = [])
     {
-        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/uncategorize/', null, [], $params);
+        $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/uncategorize/', [], $params);
         return true;
     }
 
@@ -95,7 +95,7 @@ class BankTransactions extends Module
      */
     public function match($id, $data, $params = [])
     {
-        $data = $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/match', null, $data, $params);
+        $data = $this->client->post($this->getUrl() . '/uncategorized/' . $id . '/match', $data, $params);
         return $data['transactions_to_be_matched'];
     }
 

@@ -23,7 +23,7 @@ trait Payable
      */
     public function applyCredits($id, $data = [])
     {
-        $data = $this->client->post($this->getUrl() . '/' . $id . '/credits', null, $data);
+        $data = $this->client->post($this->getUrl() . '/' . $id . '/credits', $data);
 
         return $data['use_credits'];
     }

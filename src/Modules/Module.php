@@ -239,12 +239,12 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
      */
     public function doAction($id, $action, $data = [], $params = [])
     {
-        $this->client->post($this->getUrl() . '/' . $id . '/' . $action, null, $data, $params);
+        $this->client->post($this->getUrl() . '/' . $id . '/' . $action, $data, $params);
 
         // If we arrive here without exceptions, everything went well
         return true;
     }
-    
+
     /**
      * @param $property
      * @param null $id
