@@ -98,8 +98,7 @@ class Projects extends Module
             'description' => $description
         ];
 
-        $data = $this->client->post($this->getUrl() . '/' .  $id . '/clone', null, $data);
+        $data = $this->client->post($this->getUrl() . '/' .  $id . '/clone', $data);
         return new Project($this, $data);
     }
-
 }

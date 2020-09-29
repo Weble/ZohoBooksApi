@@ -21,7 +21,7 @@ class Invoices extends Documents
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        $this->client->post($this->getUrl().'/paymentreminder', null, [], $params);
+        $this->client->post($this->getUrl() . '/paymentreminder', [], $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -52,7 +52,7 @@ class Invoices extends Documents
      */
     public function sendPaymentReminder($id, $data = [], $params = [])
     {
-        $this->client->post($this->getUrl().'/'.$id.'/paymentreminder', null, $data, $params);
+        $this->client->post($this->getUrl() . '/' . $id . '/paymentreminder', $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -63,7 +63,7 @@ class Invoices extends Documents
      */
     public function getPaymentReminderEmailContent($id)
     {
-        return $this->client->get($this->getUrl().'/'.$id.'/paymentreminder');
+        return $this->client->get($this->getUrl() . '/' . $id . '/paymentreminder');
     }
 
 
@@ -148,7 +148,7 @@ class Invoices extends Documents
             'apply_creditnotes' => $creditData
         ];
 
-        $this->client->post($this->getUrl().'/'.$invid.'/credits', null, $data);
+        $this->client->post($this->getUrl() . '/' . $invid . '/credits', $data);
         return true;
     }
 }

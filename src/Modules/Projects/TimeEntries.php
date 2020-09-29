@@ -35,8 +35,8 @@ class TimeEntries extends Module
      */
     public function log($data)
     {
-        $data = $this->client->post($this->getUrl(), null, $data);
-        return new Project\TimeEntry( $data['time_entry'], $this );
+        $data = $this->client->post($this->getUrl(), $data);
+        return new Project\TimeEntry($data['time_entry'], $this);
     }
 
     /**
@@ -55,7 +55,7 @@ class TimeEntries extends Module
     public function getTimer()
     {
         $data = $this->client->get($this->getUrl() . '/runningtimer/me');
-        return new Project\TimeEntry( $data['time_entry'], $this );
+        return new Project\TimeEntry($data['time_entry'], $this);
     }
 
     /**
@@ -65,7 +65,7 @@ class TimeEntries extends Module
     public function startTime($id)
     {
         $data = $this->client->post($this->getUrl() . '/' . $id . '/timer/start');
-        return new Project\TimeEntry( $data['time_entry'], $this );
+        return new Project\TimeEntry($data['time_entry'], $this);
     }
 
     /**
@@ -75,7 +75,7 @@ class TimeEntries extends Module
     public function stopTimer($id)
     {
         $data = $this->client->post($this->getUrl() . '/' . $id . '/timer/stop');
-        return new Project\TimeEntry( $data['time_entry'], $this );
+        return new Project\TimeEntry($data['time_entry'], $this);
     }
 
     /**
@@ -85,8 +85,7 @@ class TimeEntries extends Module
      */
     public function update($id, $data, $params = [])
     {
-        $data = $this->client->put($this->getUrl(), $id, null, $data );
-        return new Project\TimeEntry( $data['time_entry'], $this );
+        $data = $this->client->put($this->getUrl(), $id, $data);
+        return new Project\TimeEntry($data['time_entry'], $this);
     }
-
 }

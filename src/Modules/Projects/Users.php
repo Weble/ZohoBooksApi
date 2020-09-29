@@ -19,7 +19,7 @@ class Users extends SubModule
      */
     public function assign($data)
     {
-        $data = $this->client->post($this->getUrl(), null, $data);
+        $data = $this->client->post($this->getUrl(), $data);
         return $data['users'];
     }
 
@@ -29,7 +29,7 @@ class Users extends SubModule
      */
     public function invite($data)
     {
-        $data = $this->client->post($this->getUrl() . '/invite', null, $data);
+        $data = $this->client->post($this->getUrl() . '/invite', $data);
         return $data['user'];
     }
 }

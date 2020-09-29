@@ -43,7 +43,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      */
     public function getList($params = [])
     {
-        $list = $this->client->getList($this->getUrl(), null, $params);
+        $list = $this->client->getList($this->getUrl(), $params);
 
         $collection = new Collection($list[$this->getAnswerKeyName()]);
         return $collection;
@@ -56,7 +56,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      */
     public function update($data)
     {
-        $data = $this->client->put($this->getUrl(), null, null, $data);
+        $data = $this->client->put($this->getUrl(), null, $data);
         $collection = new Collection($data[$this->getAnswerKeyName()]);
 
         return $collection;

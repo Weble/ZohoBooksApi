@@ -1,6 +1,7 @@
 <?php
 
 namespace Webleit\ZohoBooksApi\Modules;
+
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Webleit\ZohoBooksApi\Models\Template;
@@ -21,7 +22,7 @@ abstract class Documents extends Module
      */
     public function getEmailContent($id, $params = [])
     {
-        return $this->client->get($this->getUrl() . '/' . $id . '/email', null, null, $params);
+        return $this->client->get($this->getUrl() . '/' . $id . '/email', null, $params);
     }
 
     /**
@@ -44,7 +45,7 @@ abstract class Documents extends Module
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        $this->client->post($this->getUrl() . '/email', null, $data, $params);
+        $this->client->post($this->getUrl() . '/email', $data, $params);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -56,7 +57,7 @@ abstract class Documents extends Module
      */
     public function updateBillingAddress($id, $data = [])
     {
-        $this->client->put($this->getUrl() . '/' . $id . '/address/billing', null, null, $data);
+        $this->client->put($this->getUrl() . '/' . $id . '/address/billing', null, $data);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -68,7 +69,7 @@ abstract class Documents extends Module
      */
     public function updateShippingAddress($id, $data = [])
     {
-        $this->client->put($this->getUrl() . '/' . $id . '/address/shipping', null, null, $data);
+        $this->client->put($this->getUrl() . '/' . $id . '/address/shipping', null, $data);
         // If we arrive here without exceptions, everything went well
         return true;
     }
@@ -101,7 +102,7 @@ abstract class Documents extends Module
     {
         $params['invoice_ids'] = implode(",", $ids);
 
-        return $this->client->rawGet($this->getUrl() . '/pdf', null, $params);
+        return $this->client->rawGet($this->getUrl() . '/pdf', $params);
     }
 
     /**

@@ -39,7 +39,7 @@ class Bills extends Module
      */
     public function updateBillingAddress($id, $data = [])
     {
-        $this->client->put($this->getUrl() . '/' . $id . '/address/billing', null, null, $data);
+        $this->client->put($this->getUrl() . '/' . $id . '/address/billing', null, $data);
         // If we arrive here without exceptions, everything went well
         return true;
     }

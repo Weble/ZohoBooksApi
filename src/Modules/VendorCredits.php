@@ -22,7 +22,7 @@ class VendorCredits extends Module
      */
     public function applyToBill($id, $data)
     {
-        $data = $this->client->post($this->getUrl() . '/' . $id . '/bills', null, $data);
+        $data = $this->client->post($this->getUrl() . '/' . $id . '/bills', $data);
 
         return $data['bills'];
     }

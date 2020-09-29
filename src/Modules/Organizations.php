@@ -19,7 +19,7 @@ class Organizations extends Module
 
         foreach ($organizations as $organization) {
             if ($organization->is_default_org) {
-               return $organization;
+                return $organization;
             }
         }
 
@@ -33,7 +33,7 @@ class Organizations extends Module
     {
         $organization = $this->getDefaultOrganization();
 
-        return $organization ? $organization->getId(): false;
+        return $organization ? $organization->getId() : false;
     }
 
     /**
@@ -42,7 +42,7 @@ class Organizations extends Module
      */
     public function addAddress($data)
     {
-        $data = $this->client->post($this->getUrl() . '/address', '', $data);
+        $data = $this->client->post($this->getUrl() . '/address', $data);
         return $data['organization_address'];
     }
 
@@ -53,7 +53,7 @@ class Organizations extends Module
      */
     public function updateAddress($id, $data)
     {
-        $data = $this->client->put($this->getUrl() . '/address/' . $id, '', $data);
+        $data = $this->client->put($this->getUrl() . '/address/' . $id, null, $data);
         return $data['organization_address'];
     }
 }
