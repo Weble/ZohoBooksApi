@@ -11,7 +11,7 @@
     ],
     "require": {
         "php" : ">=7.2.0",
-        "guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/guzzle": "^6.0 | ^7.0",
         "doctrine/inflector": "^2.0",
         "tightenco/collect": "^6.0",
         "weble/zohoclient": "^3.0.1"
