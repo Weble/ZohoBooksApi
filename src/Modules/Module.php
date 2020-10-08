@@ -3,7 +3,7 @@
 namespace Webleit\ZohoBooksApi\Modules;
 
 use Doctrine\Inflector\InflectorFactory;
-use Tightenco\Collect\Support\Collection;
+use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
 
