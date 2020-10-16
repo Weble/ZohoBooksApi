@@ -2,6 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Modules;
 
+use Webleit\ZohoBooksApi\Models\Invoice\CreditsApplied;
 use Webleit\ZohoBooksApi\Modules\Mixins\Creditable;
 use Webleit\ZohoBooksApi\Modules\Mixins\Payable;
 
@@ -12,6 +13,9 @@ use Webleit\ZohoBooksApi\Modules\Mixins\Payable;
 class Invoices extends Documents
 {
     use Creditable, Payable;
+
+    /** @var string */
+    protected $creditsAppliedClass = CreditsApplied::class;
 
     /**
      * @param  array  $ids
