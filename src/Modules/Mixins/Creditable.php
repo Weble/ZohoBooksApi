@@ -13,7 +13,7 @@ trait Creditable
      */
     public function getCreditsApplied($id)
     {
-        return $this->getPropertyList('creditsapplied', $id, null, 'credits');
+        return $this->getPropertyList('creditsapplied', $id, $this->creditsAppliedClass ?? null, 'credits');
     }
 
     /**

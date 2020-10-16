@@ -9,7 +9,6 @@ use Psr\Http\Message\StreamInterface;
 use Weble\ZohoClient\Enums\Region;
 use Weble\ZohoClient\OAuthClient;
 use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
-use Webleit\ZohoCrmApi\Exception\NonExistingModule;
 
 /**
  * Class Client
@@ -24,7 +23,7 @@ class Client
     /**
      * Whilst this is technically a ClientInterface, we'll just mark it as a standard
      * client, with all the methods in place.
-     * 
+     *
      * @var \GuzzleHttp\Client
      */
     protected $httpClient;
