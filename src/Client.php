@@ -122,7 +122,7 @@ class Client
         return $this->call($url, 'GET', [], ['query' => $filters]);
     }
 
-    public function get(string $url, ?string $id = null, array $params = []): array
+    public function get(string $url, ?string $id = null, array $params = [])
     {
         if ($id !== null) {
             $url .= '/' . $id;

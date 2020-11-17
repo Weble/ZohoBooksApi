@@ -58,7 +58,7 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     /**
      * Get a single record for this module
      * @param string $id
-     * @return Model
+     * @return Model|string
      */
     public function get($id, array $params = [])
     {
