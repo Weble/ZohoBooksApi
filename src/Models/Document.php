@@ -22,7 +22,7 @@ abstract class Document extends Model
     public function getPdf()
     {
         return $this->module->get($this->getId(), [
-           'accept' => 'pdf'
+            'query' => ['accept' => 'pdf'],
         ]);
     }
 }
