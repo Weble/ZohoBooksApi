@@ -17,6 +17,8 @@ composer require webleit/zohobooksapi
 In order to use the library, just require the composer autoload file, and then fire up the library itself.
 In order for the library to work, you need to be authenticated with the zoho apis.
 
+## Online Mode
+
 ```php
 require './vendor/autoload.php';
 
@@ -34,6 +36,31 @@ $client->setOrganizationId('[YOUR_ORGANIZATION_ID]');
 $zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks($client);
 ```
 
+## Offline Mode
+
+This one is preferred when you need to autonomously renew the access token yourself. Used in all the "machine to machine" communication, and it's the best way when you are using the apis to, for example, sync with a 3rd party application, like your ERP or Ecommerce website. See https://github.com/Weble/ZohoClient#example-usage-offline-mode for more details on this. 
+
+```php
+require './vendor/autoload.php';
+
+// setup the generic zoho oath client
+$oAuthClient = new \Weble\ZohoClient\OAuthClient('[CLIENT_ID]', '[CLIENT_SECRET]');
+$oAuthClient->setRefreshToken('[REFRESH_TOKEN]');
+$oAuthClient->setRegion(\Weble\ZohoClient\Enums\Region::us());
+$oAuthClient->useCache($yourPSR6CachePool);
+$oAuthClient->offlineMode();
+
+// Access Token
+$accessToken = $oAuthClient->getAccessToken();
+$isExpired = $oAuthClient->accessTokenExpired();
+
+// setup the zoho books client
+$client = new \Webleit\ZohoBooksApi\Client($oAuthClient);
+$client->setOrganizationId('[YOUR_ORGANIZATION_ID]');
+
+// Create the main class
+$zohoBooks = new \Webleit\ZohoBooksApi\ZohoBooks($client);
+```
 
 ## API calls
 
