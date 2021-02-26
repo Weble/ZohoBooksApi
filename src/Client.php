@@ -18,7 +18,7 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
 class Client
 {
     const ZOHOBOOKS_API_URL_PATH = "/api/v3/";
-    const ZOHOBOOKS_API_URL_PARTIAL_HOST = 'https://books.zoho';
+    const ZOHOBOOKS_API_URL_PARTIAL_HOST = 'https://books.zoho.';
 
     /**
      * Whilst this is technically a ClientInterface, we'll just mark it as a standard
@@ -86,13 +86,13 @@ class Client
         }
     }
 
-    public function setRegion(Region $region): self
+    public function setRegion(string $region): self
     {
         $this->oAuthClient->setRegion($region);
         return $this;
     }
 
-    public function getRegion(): Region
+    public function getRegion(): string
     {
         return $this->oAuthClient->getRegion();
     }
@@ -100,7 +100,7 @@ class Client
     public function getUrl(): string
     {
         $apiUrl = self::ZOHOBOOKS_API_URL_PARTIAL_HOST;
-        $domain = $this->getRegion()->getValue();
+        $domain = $this->getRegion();
         $path = self::ZOHOBOOKS_API_URL_PATH;
 
         return $apiUrl . $domain . $path;
