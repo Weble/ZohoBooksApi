@@ -190,7 +190,7 @@ class Client
 
             // Retry?
             if ($e->getCode() === 401) {
-                $this->oAuthClient->generateTokens()->getAccessToken();
+                $this->oAuthClient->refreshAccessToken();
                 return $this->call($uri, $method, $data, $rawData);
             }
 
