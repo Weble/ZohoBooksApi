@@ -2,7 +2,7 @@
 
 namespace Webleit\ZohoBooksApi\Tests;
 
-use Tightenco\Collect\Support\Collection;
+use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Models\Contact;
 use Webleit\ZohoBooksApi\Models\CustomerPayment;
 

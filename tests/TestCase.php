@@ -25,7 +25,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * setup
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
 
         $authFile = __DIR__.'/config.example.json';
@@ -33,8 +33,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $authFile = __DIR__.'/config.json';
         }
 
-        $auth = json_decode(file_get_contents($authFile))
-        ;
+        $auth = json_decode(file_get_contents($authFile));
 
         $oAuthClient = self::createOAuthClient();
         $client = new Client($oAuthClient);
@@ -55,7 +54,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $auth = json_decode(file_get_contents($authFile));
 
-        $region = Region::us();
+        $region = Region::US;
         if (isset($auth->region)) {
             $region = Region::make($auth->region);
         }
