@@ -37,4 +37,17 @@ class TaxGroups extends Module
     {
         return TaxGroup::class;
     }
+
+    /**
+    * Override returned key
+    *
+    * This overrides the key that is returned from zoho, as they
+    * send back 'tax_groups' instead of 'taxgroups'
+    *
+    * @return string
+    */
+    public function getResourceKey()
+    {
+        return 'tax_groups';
+    }
 }
