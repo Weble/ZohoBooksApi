@@ -6,6 +6,7 @@ use Doctrine\Inflector\InflectorFactory;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
+use Webleit\ZohoBooksApi\Models\PageContext;
 
 /**
  * Class Module
@@ -35,6 +36,27 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     {
         $this->client = $client;
         $this->inflector = InflectorFactory::create()->build();
+    }
+
+    /**
+     * Get the list of the resources requested with page context
+     * @param array $params
+     * @return Collection
+     */
+    public function getListWithPageContext($params = [])
+    {
+        $list = $this->client->getList($this->getUrl(), $params);
+
+        $items = new Collection($list[$this->getResourceKey()]);
+        $items = $items->mapWithKeys(function ($item) {
+            $item = $this->make($item);
+            return [$item->getId() => $item];
+        });
+
+        return new Collection([
+            'items' => $items,
+            'page_context' => new PageContext($list['page_context']),
+        ]);
     }
 
     /**
