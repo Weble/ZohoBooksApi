@@ -9,8 +9,8 @@ class Pagination
 	protected $page = 1;
 	protected $count = 0;
 	protected $moreRecords = false;
-	protected ?int $total = null;
-	protected ?int $totalPages = null;
+	protected $total = null;
+	protected $totalPages = null;
 
 	public function __construct(array $params = [])
 	{
@@ -46,7 +46,7 @@ class Pagination
 	 *
 	 * @return int|null
 	 */
-	public function getTotal(): ?int
+	public function total(): ?int
 	{
 		return $this->total;
 	}
@@ -56,18 +56,8 @@ class Pagination
 	 *
 	 * @return int|null
 	 */
-	public function getTotalPages(): ?int
+	public function totalPages(): ?int
 	{
 		return $this->totalPages;
-	}
-
-	/**
-	 * Get the value of hasMorePage
-	 *
-	 * @return bool
-	 */
-	public function getHasMorePage(): bool
-	{
-		return $this->hasMorePage;
 	}
 }
