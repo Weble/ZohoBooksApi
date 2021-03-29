@@ -7,7 +7,6 @@ class Pagination
 {
 	protected $perPage = 200;
 	protected $page = 1;
-	protected $count = 0;
 	protected $moreRecords = false;
 	protected $total = null;
 	protected $totalPages = null;
@@ -29,11 +28,6 @@ class Pagination
 	public function page(): int
 	{
 		return $this->page;
-	}
-
-	public function count(): int
-	{
-		return $this->count;
 	}
 
 	public function hasMoreRecords(): bool
