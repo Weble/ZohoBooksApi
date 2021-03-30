@@ -61,6 +61,14 @@ abstract class Model implements \JsonSerializable, Arrayable
     {
         $this->data[$name] = $value;
     }
+    
+    /**
+     * @param $name
+     */
+    function __isset($name)
+    {
+        return isset($this->data[$name]);
+    }
 
     /**
      * @param $name
