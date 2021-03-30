@@ -6,6 +6,9 @@ use Doctrine\Inflector\InflectorFactory;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Client;
 use Webleit\ZohoBooksApi\Models\Model;
+use Webleit\ZohoBooksApi\Models\PageContext;
+use Webleit\ZohoBooksApi\Models\RecordCollection;
+use Webleit\ZohoBooksApi\Request\Pagination;
 
 /**
  * Class Module
@@ -40,17 +43,19 @@ abstract class Module implements \Webleit\ZohoBooksApi\Contracts\Module
     /**
      * Get the list of the resources requested
      * @param array $params
-     * @return Collection
+     * @return RecordCollection
      */
     public function getList($params = [])
     {
         $list = $this->client->getList($this->getUrl(), $params);
 
-        $collection = new Collection($list[$this->getResourceKey()]);
+        $collection = new RecordCollection($list[$this->getResourceKey()]);
         $collection = $collection->mapWithKeys(function ($item) {
             $item = $this->make($item);
             return [$item->getId() => $item];
         });
+
+        $collection->withPagination(new Pagination($list['page_context'] ?? []));
 
         return $collection;
     }

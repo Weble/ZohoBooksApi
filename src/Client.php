@@ -17,8 +17,17 @@ use Webleit\ZohoBooksApi\Exceptions\ErrorResponseException;
  */
 class Client
 {
-    const ZOHOBOOKS_API_URL_PATH = "/api/v3/";
-    const ZOHOBOOKS_API_URL_PARTIAL_HOST = 'https://books.zoho';
+    /**
+     * Region to Url Mapping
+     * @var string[]
+     */
+    protected $regionDomain = [
+        Region::US => 'https://books.zoho.com/api/v3/',
+        Region::AU => 'https://books.zoho.com.au/api/v3/',
+        Region::EU => 'https://books.zoho.eu/api/v3/',
+        Region::IN => 'https://books.zoho.in/api/v3/',
+        Region::CN => 'https://books.zoho.com.cn/api/v3/',
+    ];
 
     /**
      * Whilst this is technically a ClientInterface, we'll just mark it as a standard
@@ -86,24 +95,20 @@ class Client
         }
     }
 
-    public function setRegion(Region $region): self
+    public function setRegion(string $region): self
     {
         $this->oAuthClient->setRegion($region);
         return $this;
     }
 
-    public function getRegion(): Region
+    public function getRegion(): string
     {
         return $this->oAuthClient->getRegion();
     }
 
     public function getUrl(): string
     {
-        $apiUrl = self::ZOHOBOOKS_API_URL_PARTIAL_HOST;
-        $domain = $this->getRegion()->getValue();
-        $path = self::ZOHOBOOKS_API_URL_PATH;
-
-        return $apiUrl . $domain . $path;
+        return $this->regionDomain[$this->getRegion()] ?? $this->regionDomain[Region::US];
     }
 
     public function getOrganizationId(): ?string
@@ -190,7 +195,7 @@ class Client
 
             // Retry?
             if ($e->getCode() === 401) {
-                $this->oAuthClient->generateTokens()->getAccessToken();
+                $this->oAuthClient->refreshAccessToken();
                 return $this->call($uri, $method, $data, $rawData);
             }
 
