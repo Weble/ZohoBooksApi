@@ -28,6 +28,11 @@ class Client
         Region::IN => 'https://books.zoho.in/api/v3/',
         Region::CN => 'https://books.zoho.com.cn/api/v3/',
     ];
+    
+    /**
+     * @var bool
+     */
+    protected $retriedRefresh = false;
 
     /**
      * Whilst this is technically a ClientInterface, we'll just mark it as a standard
@@ -192,11 +197,12 @@ class Client
                 $this->httpClient->$method($this->getUrl() . $uri, $options)
             );
         } catch (ClientException $e) {
-
             // Retry?
-            if ($e->getCode() === 401) {
+            if ($e->getCode() === 401 && ! $this->retriedRefresh) {
                 $this->oAuthClient->refreshAccessToken();
-                return $this->call($uri, $method, $data, $rawData);
+                $this->retriedRefresh = true;
+
+                return $this->call($uri, $method, $data);
             }
 
             throw $e;
