@@ -27,7 +27,7 @@ abstract class Model implements \JsonSerializable, Arrayable
      * @param array $data
      * @param  Module   $module
      */
-    public function __construct($data = [], Module $module)
+    public function __construct(array $data, Module $module)
     {
         $this->data = $data;
         $this->module = $module;
