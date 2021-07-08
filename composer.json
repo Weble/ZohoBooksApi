@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php" : "^7.2 || 8.0",
+        "php" : "^7.2 || ^8.0",
         "guzzlehttp/guzzle": "^6.0 | ^7.0",
         "doctrine/inflector": "^2.0",
         "illuminate/collections": "^v8.0",

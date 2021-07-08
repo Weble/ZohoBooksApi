@@ -24,12 +24,12 @@ abstract class Model implements \JsonSerializable, Arrayable
 
     /**
      * Model constructor.
-     * @param array $data
+     * @param mixed $data
      * @param  Module   $module
      */
-    public function __construct($data = [], Module $module)
+    public function __construct($data, Module $module)
     {
-        $this->data = $data;
+        $this->data = $data ?? [];
         $this->module = $module;
         $this->inflector = InflectorFactory::create()->build();
     }
