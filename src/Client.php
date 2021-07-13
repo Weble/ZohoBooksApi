@@ -206,11 +206,15 @@ class Client
                 return $this->call($uri, $method, $data);
             }
 
-            // Get the Zoho error code and message instead of the GuzzleError
-            preg_match('/"code":(\d*)/', $e->getMessage(), $zohoErrorCode);
-            preg_match('/"message":(.*)/', $e->getMessage(), $zohoErrorMessage);
-            
-            throw new ErrorResponseException($zohoErrorMessage[1], $zohoErrorCode[1], $e);
+            // Throw an error response exception on 400 Bad Request to return the Zoho error message.
+            if (400 === $e->getCode()) {
+                preg_match('/"code":(\d*)/', $e->getMessage(), $zohoErrorCode);
+                preg_match('/"message":(.*)/', $e->getMessage(), $zohoErrorMessage);
+
+                throw new ErrorResponseException($zohoErrorMessage[1], $zohoErrorCode[1], $e);
+            }
+
+            throw $e;
         }
     }
 
