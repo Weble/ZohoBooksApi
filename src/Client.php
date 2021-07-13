@@ -209,7 +209,7 @@ class Client
             // Throw an error response exception on 400 Bad Request to return the Zoho error message.
             if (400 === $e->getCode()) {
                 preg_match('/"code":(\d*)/', $e->getMessage(), $zohoErrorCode);
-                preg_match('/"message":(.*)/', $e->getMessage(), $zohoErrorMessage);
+                preg_match('/"message":(.*)[}|\n]/', $e->getMessage(), $zohoErrorMessage);
 
                 throw new ErrorResponseException($zohoErrorMessage[1], $zohoErrorCode[1], $e);
             }
