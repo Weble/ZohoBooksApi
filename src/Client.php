@@ -197,6 +197,7 @@ class Client
                 $this->httpClient->$method($this->getUrl() . $uri, $options)
             );
         } catch (ClientException $e) {
+            
             // Retry?
             if ($e->getCode() === 401 && ! $this->retriedRefresh) {
                 $this->oAuthClient->refreshAccessToken();
@@ -205,7 +206,11 @@ class Client
                 return $this->call($uri, $method, $data);
             }
 
-            throw $e;
+            // Get the Zoho error code and message instead of the GuzzleError
+            preg_match('/"code":(\d*)/', $e->getMessage(), $zohoErrorCode);
+            preg_match('/"message":(.*)/', $e->getMessage(), $zohoErrorMessage);
+            
+            throw new ErrorResponseException($zohoErrorMessage[1], $zohoErrorCode[1], $e);
         }
     }
 
