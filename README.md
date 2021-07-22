@@ -136,6 +136,11 @@ $total = $invoice->total;
 
 will return a \Webleit\ZohoBooksApi\Models\Invoice object, which is Arrayable and Jsonable, and that can be therefore used in many ways.
 
+## Zoho Books token expiration notes
+* Each access token is valid for only an hour and used only for the operations defined in the scope.
+* Refresh token does not expire. Use it to refresh access tokens when they expire.
+* You can only generate a maximum of five refresh tokens in a minute.
+
 ## Contributing
 
 Finding bugs, sending pull requests or improving the docs - any contribution is welcome and highly appreciated
