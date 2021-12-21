@@ -38,4 +38,17 @@ class RecurringInvoices extends Documents
     {
         return 'recurring_invoices';
     }
+
+    /**
+     * Override returned API key name
+     *
+     * This overrides the API key name that is returned from zoho, as they
+     * send back 'recurring_invoice_id' instead of 'recurringinvoices_id'
+     *
+     * @return string
+     */
+    public function getApiKeyName()
+    {
+        return 'recurring_invoice_id';
+    }
 }
