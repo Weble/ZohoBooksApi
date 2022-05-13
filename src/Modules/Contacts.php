@@ -70,8 +70,8 @@ class Contacts extends Module
         $from = null,
         $to = null,
         $data = [],
-        $filterBy = 'Status.Outstanding',
-        $sendUnpaidInvoiceList = true,
+        $filterBy = 'Status.All',
+        $sendUnpaidInvoiceList = false,
     ) {
         $params = [];
 
