@@ -61,10 +61,18 @@ class Contacts extends Module
      * @param array $from
      * @param array $to
      * @param array $data
+     * @param string $filterBy - Status.All or Status.Outstanding
+     * @param bool $sendUnpaidInvoiceList
      * @return bool
      */
-    public function emailStatement($id, $from = null, $to = null, $data = [])
-    {
+    public function emailStatement(
+        $id,
+        $from = null,
+        $to = null,
+        $data = [],
+        $filterBy = 'Status.All',
+        $sendUnpaidInvoiceList = false,
+    ) {
         $params = [];
 
         if ($from && !($from instanceof \DateTime)) {
@@ -77,7 +85,20 @@ class Contacts extends Module
             $params['end_date'] = $to->format('Y-m-d');
         }
 
-        $this->client->post($this->getUrl() . '/' . $id . '/statements/email', $data, $params);
+        if (in_array($filterBy, ['Status.Outstanding', 'Status.All'])) {
+            $params['filter_by'] = $filterBy;
+        }
+
+        //This apparently needs to be a string for zoho to accept it, so lets take a bool and make it a string
+        $params['send_unpaid_invoice_list'] = $sendUnpaidInvoiceList
+            ? 'true'
+            : 'false';
+
+        $this->client->post(
+            $this->getUrl() . '/' . $id . '/statements/email',
+            $data,
+            ['query' => $params],
+        );
         // If we arrive here without exceptions, everything went well
         return true;
     }
