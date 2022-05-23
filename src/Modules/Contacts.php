@@ -71,7 +71,7 @@ class Contacts extends Module
         $to = null,
         $data = [],
         $filterBy = 'Status.All',
-        $sendUnpaidInvoiceList = false,
+        $sendUnpaidInvoiceList = false
     ) {
         $params = [];
 
