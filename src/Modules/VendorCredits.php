@@ -83,4 +83,18 @@ class VendorCredits extends Module
     {
         return 'vendor_credits';
     }
+    
+    /**
+     * Override Api Key Name
+     *
+     * This overrides the key that is returned from zoho, as they
+     * send back 'vendor_credit' instead of 'vendorcredit'
+     *
+     * @return string
+     */
+     
+    public function getApiKeyName()
+    {
+        return 'vendor_credit_id';
+    }
 }
