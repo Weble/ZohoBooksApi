@@ -92,7 +92,8 @@ class ApiTest extends TestCase
      */
     public function canExportListOfInvoices()
     {
-        $list = self::$zoho->invoices->exportPdfList();
-        $this->assertTrue(count($list) > 0);
+        $id =self::$zoho->invoices->getList()->first()->getId();
+        $list = self::$zoho->invoices->exportPdfList([$id]);
+        $this->assertNotNull($list);
     }
 }
