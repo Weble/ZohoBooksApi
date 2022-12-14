@@ -100,7 +100,7 @@ abstract class Documents extends Module
      */
     public function exportPdfList($ids = [])
     {
-        $params['invoice_ids'] = implode(",", $ids);
+        $params['query']['invoice_ids'] = implode(",", $ids);
         return $this->client->rawGet($this->client->getUrl() . $this->getUrl() . '/pdf', $params);
     }
 
