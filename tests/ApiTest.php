@@ -86,4 +86,13 @@ class ApiTest extends TestCase
         // delete it it afterwards
         self::$zoho->contacts->delete($customer->getId());
     }
+
+    /**
+     * @test
+     */
+    public function canExportListOfInvoices()
+    {
+        $list = self::$zoho->invoices->exportPdfList();
+        $this->assertTrue(count($list) > 0);
+    }
 }
