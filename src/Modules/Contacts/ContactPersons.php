@@ -28,7 +28,7 @@ class ContactPersons extends Module
      */
     public function getName()
     {
-        return 'contact_person';
+        return 'contact_persons';
     }
 
     /**
