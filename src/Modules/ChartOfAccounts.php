@@ -17,7 +17,15 @@ class ChartOfAccounts extends Module
     {
         return 'account_id';
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getResourceItemKey()
+    {
+        return 'chart_of_account';
+    }
+
     /**
      * @param $id
      * @return bool
