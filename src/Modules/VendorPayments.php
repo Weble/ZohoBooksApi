@@ -30,7 +30,7 @@ class VendorPayments extends Module
      */
     public function getName()
     {
-        return 'payment';
+        return 'vendorpayment';
     }
 
     /**
