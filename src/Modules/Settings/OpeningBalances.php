@@ -2,7 +2,6 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Settings;
 
-use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Models\Settings\OpeningBalance;
 use Webleit\ZohoBooksApi\Modules\Module;
@@ -42,7 +41,7 @@ class OpeningBalances extends Module
      */
     public function getList($params = [])
     {
-        return new Collection([$this->get()]);
+        return new Collection([$this->get(null)]);
     }
 
     /**
