@@ -72,5 +72,22 @@ class OpeningBalances extends Module
 
         return $this->make($data);
     }
+    
+    /**
+     * Deletes a record for this module
+     *
+     * @param $id optional, there is only one opening balance
+     * @return bool
+     */
+    public function delete($id)
+    {
+        // unlike most(all?) other update endpoints, the url is not added to the path
+        // this is likely because there is only one openingbalances record w multiple accounts
+        // https://www.zoho.com/books/api/v3/opening-balance/#delete-opening-balance
+        $data = $this->client->call($this->getUrl(), 'DELETE');
+        $data = $data[$this->inflector->singularize($this->getResourceItemKey())];
+
+        return $this->make($data);
+    }
 
 }
