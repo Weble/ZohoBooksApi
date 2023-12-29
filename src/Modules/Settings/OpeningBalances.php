@@ -2,7 +2,6 @@
 
 namespace Webleit\ZohoBooksApi\Modules\Settings;
 
-use Doctrine\Common\Inflector\Inflector;
 use Illuminate\Support\Collection;
 use Webleit\ZohoBooksApi\Models\Settings\OpeningBalance;
 use Webleit\ZohoBooksApi\Modules\Module;
@@ -42,7 +41,7 @@ class OpeningBalances extends Module
      */
     public function getList($params = [])
     {
-        return new Collection([$this->get()]);
+        return new Collection([$this->get(null)]);
     }
 
     /**
@@ -57,7 +56,7 @@ class OpeningBalances extends Module
 
     /**
      * Update a record for this module
-     * @param string $id
+     * @param string $id can pass null, only used for compatibility
      * @param array $data
      * @param array $params
      * @return Model
@@ -72,5 +71,22 @@ class OpeningBalances extends Module
 
         return $this->make($data);
     }
+    
+    /**
+     * Deletes a record for this module
+     *
+     * @param $id can pass null, only used for compatibility
+     * @return bool
+     */
+    public function delete($id)
+    {
+        // unlike most(all?) other update endpoints, the url is not added to the path
+        // this is likely because there is only one openingbalances record w multiple accounts
+        // https://www.zoho.com/books/api/v3/opening-balance/#delete-opening-balance
+        $data = $this->client->call($this->getUrl(), 'DELETE');
+        
+        // all is ok if we've reached this point
+        return true;
+    }    
 
 }
