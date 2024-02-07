@@ -16,7 +16,7 @@ abstract class PreferenceModule implements \Webleit\ZohoBooksApi\Contracts\Modul
      * Base Url of the Zoho Books Api
      * @var string
      */
-    const ENDPOINT = 'https://books.zoho.com/api/v3/';
+    const ENDPOINT = 'https://www.zohoapis.com/books/v3/';
 
     /**
      * @var Client
