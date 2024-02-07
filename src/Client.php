@@ -22,11 +22,12 @@ class Client
      * @var string[]
      */
     protected $regionDomain = [
-        Region::US => 'https://books.zoho.com/api/v3/',
-        Region::AU => 'https://books.zoho.com.au/api/v3/',
-        Region::EU => 'https://books.zoho.eu/api/v3/',
-        Region::IN => 'https://books.zoho.in/api/v3/',
-        Region::CN => 'https://books.zoho.com.cn/api/v3/',
+        Region::US => 'https://www.zohoapis.com/books/v3/',
+        Region::AU => 'https://www.zohoapis.com.au/books/v3/',
+        Region::EU => 'https://www.zohoapis.eu/books/v3/',
+        Region::IN => 'https://www.zohoapis.in/books/v3/',
+        Region::CN => 'https://www.zohoapis.com.cn/books/v3/',
+        Region::JP => 'https://www.zohoapis.jp/books/v3/', 
     ];
     
     /**
