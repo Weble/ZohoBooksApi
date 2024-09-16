@@ -203,7 +203,7 @@ class Client
                 $this->oAuthClient->refreshAccessToken();
                 $this->retriedRefresh = true;
 
-                return $this->call($uri, $method, $data);
+                return $this->call($uri, $method, $data, $rawData);
             }
 
             throw $e;
