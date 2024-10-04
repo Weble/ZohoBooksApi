@@ -36,9 +36,17 @@ class VendorPayments extends Module
     /**
      * @return string
      */
+    public function getResourceKey()
+    {
+        return 'vendorpayments';
+    }
+
+    /**
+     * @return string
+     */
     public function getResourceItemKey()
     {
-        return 'vendorpayment';
+        return 'payment';
     }
 
     /**
