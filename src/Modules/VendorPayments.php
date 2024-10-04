@@ -46,7 +46,7 @@ class VendorPayments extends Module
      */
     public function getResourceItemKey()
     {
-        return 'payment';
+        return 'vendorpayment';
     }
 
     /**
