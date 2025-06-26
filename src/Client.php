@@ -81,7 +81,7 @@ class Client
      */
     protected $rateLimitRemaining;
 
-    public function __construct(OAuthClient $oAuthClient, ClientInterface $client = null)
+    public function __construct(OAuthClient $oAuthClient, ?ClientInterface $client = null)
     {
         if (!$client) {
             $client = new \GuzzleHttp\Client();
