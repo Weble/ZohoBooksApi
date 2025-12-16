@@ -14,6 +14,7 @@ use Webleit\ZohoBooksApi\Modules;
  * @property-read Modules\SalesOrders $salesorders
  * @property-read Modules\Invoices $invoices
  * @property-read Modules\RecurringInvoices $recurringinvoices
+ * @property-read Modules\RetainerInvoices $retainerinvoices
  * @property-read Modules\CreditNotes $creditnotes
  * @property-read Modules\CustomerPayments $customerpayments
  * @property-read Modules\Expenses $expenses
@@ -55,6 +56,7 @@ class ZohoBooks implements Contracts\ProvidesModules
         'salesorders'            => Modules\SalesOrders::class,
         'invoices'               => Modules\Invoices::class,
         'recurringinvoices'      => Modules\RecurringInvoices::class,
+        'retainerinvoices'       => Modules\RetainerInvoices::class,
         'creditnotes'            => Modules\CreditNotes::class,
         'customerpayments'       => Modules\CustomerPayments::class,
         'expenses'               => Modules\Expenses::class,
