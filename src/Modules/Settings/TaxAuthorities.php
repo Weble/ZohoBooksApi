@@ -48,7 +48,7 @@ class TaxAuthorities extends Module
      */
     public function getApiKeyName()
     {
-        return "tax_authoritiy_id";
+        return "tax_authority_id";
     }
 }
 
